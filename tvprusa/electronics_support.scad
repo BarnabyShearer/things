@@ -1,5 +1,5 @@
 /*
- * TVRRUG Electronics mount
+ * TVRRUG electronics mount
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
@@ -9,25 +9,24 @@ $fn = 60;
 m8 = 7.80 / 2;
 m3 = 2.8 /2;
 
-	
 //http://solderpad.com/folknology/dual-stepper-motor-module/
 translate(	[
 	0,
-	10,
+	20,
 	0
 ]) {
 	mount2(
-		length=165-2*m8,
+		rod_gap=164-2*m8,
 		pitch = 44.5
 	);
 }
 translate(	[
 	0,
-	30,
+	60,
 	0
 ]) {
 	mount2(
-		length=165-2*m8,
+		rod_gap=164-2*m8,
 		pitch = 44.5
 	);
 }
@@ -35,159 +34,241 @@ translate(	[
 //http://solderpad.com/folknology/open-motion-controller/
 translate(	[
 	0,
-	-10,
+	-20,
 	0
 ]) {
 	mount1(
-		length=165-2*m8,
+		rod_gap=164-2*m8,
 		pitch = 70
 	);
 }
 translate(	[
 	0,
-	-30,
+	-60,
 	0
 ]) {
 	mount1(
-		length=165-2*m8,
+		rod_gap=164-2*m8,
 		pitch = 70
 	);
 }
 
-module mount1(length =156, width=10, thickness=3, post=m3, mount=m8, ends=2, pitch = 70) {
-	support(
-		length = length,
+module mount1(
+	width = 10,
+	thickness = 2.2,
+	rod_gap = 156,
+	rod = m8,
+	post = m3,
+	pitch = 70,
+	offset = 20
+) {
+	mount(
 		width = width,
 		thickness = thickness,
+		rod_gap = rod_gap,
+		rod = rod,
 		post = post,
-		mount = mount,
-		ends = ends,
-		posts= space1(length, pitch)
+		posts= space1(rod_gap, pitch),
+		offset = offset
 	);
 }
 
-module mount2(length =156, width=10, thickness=3, post=m3, mount=m8, ends=2, pitch = 44.5) {
-	support(
-		length = length,
+module mount2(
+	width = 10,
+	thickness = 2.2,
+	rod_gap = 156,
+	rod=m8,
+	post = m3,
+	pitch = 44.5,
+	offset = 20
+) {
+	mount(
 		width = width,
 		thickness = thickness,
+		rod_gap = rod_gap,
+		rod = rod,
 		post = post,
-		mount = mount,
-		ends = ends,
-		posts= space2(length, pitch, pitch)
+		posts= space2(rod_gap, pitch, pitch),
+		offset = offset
 	);
 }
 
-module support(length=60, width=10, thickness=3, post=m3, mount=m8, ends=2, posts=[], drop=20) {	
-	cube([
-		length,
-		width,
-		thickness
-	]);
+module mount(
+	width = 10,
+	thickness = 2.2,
+	rod_gap = 60,
+	rod = m8,
+	post = m3,
+	posts = [],
+	offset = m8
+) {
+
+	support(
+		rod_gap = rod_gap,
+		rod = rod,
+		width=post*4,
+		offset = offset,
+		thickness = 2.2
+	
+	);
+
 	for(i=posts) {
 		translate([
 			i,
-			width/2
+			thickness,
+			0
 		]) {
 			post(
 				size = post,
-				height = thickness * 3
+				height = thickness * 4
 			);
 		}
 	}
-	translate(	[
+	
+}
+
+module post(
+	size = m3,
+	height = m3*4
+) {
+	translate([
+		-size*2,
 		0,
-		width
+		0
+	]) {
+		cube([
+			size*4,
+			height/2,
+			size*4
+		]);
+	}
+	translate([
+		0,
+		height,
+		size
 	]) {
 		rotate([
 			90,
 			0,
 			0
 		]) {
-			mount(
-				rod = m8,
-				length=width,
-				thickness = thickness,
-				height = drop
-			);
-		}
-	}
-	if(ends ==2) {
-		translate(	[
-			length,
-			0
-		]) {
 			rotate([
-				90,
 				0,
-				180
+				0,
+				22.5
 			]) {
-				mount(
-					rod = m8,
-					length=width,
-					thickness = thickness,
-					height = drop
+				cylinder(
+					r = size,
+					h = height,
+					$fn=8
 				);
 			}
 		}
 	}
 }
 
-module post(size = m3, height = 9) {
-	cylinder(
-		r = size * 2,
-		height / 3 * 2
-	);
-	cylinder(
-		r = size ,
-		height
-	);
-}
-module mount(rod = m8, length = 10, height=10, thickness = 3) {
-	shell = rod +thickness;
-
-	translate(	[
-		-shell-rod,
-		0,
-		0
-	]) {
-		difference() {
+module support(
+	rod_gap = 165-2*m8,
+	rod = m8,
+	width = m3*4,
+	offset = 10,
+	thickness = 2.2
+) {
+	difference() {
+		union() {
 			cube([
-				shell*2,
-				height,
-				length
-			]);
-			translate(	[
+				rod_gap,
 				thickness,
-				-1,
+				width,
+			]);
+			translate([
+				-thickness*2-rod*2,
+				0,
+				0
+			]) {
+				cube([
+					thickness*2+rod*2,
+					thickness+offset,
+					width,
+				]);
+			}
+			translate([
+				-thickness-rod,
+				thickness+offset,
+				0
+			]) {
+				cylinder(
+					r=rod+thickness,
+					h=width
+				);
+			}
+			translate([
+				rod_gap,
+				0,
+				0
+			]) {
+				cube([
+					thickness*2+rod*2,
+					thickness+offset,
+					width,
+				]);
+			}
+			translate([
+				rod_gap+thickness+rod,
+				thickness+offset,
+				0
+			]) {
+				cylinder(
+					r=rod+thickness,
+					h=width
+				);
+			}
+		}
+			translate([
+				-thickness*3.5-rod*2,
+				-thickness,
 				-1
 			]) {
 				cube([
-					rod*2,
-					height-shell+1,
-					length+2
+					thickness*2+rod*2,
+					thickness+offset,
+					width+2,
 				]);
 			}
-			translate(	[
-				shell,
-				height-2*rod-thickness,
+		
+			translate([
+				-thickness-rod,
+				thickness+offset,
 				-1
 			]) {
-				rotate([
-					0,
-					0,
-					45
-				]) {
-					cube([
-						rod*1.4142,
-						rod*1.4142,
-						length+2
-					]);
-				}
+				cylinder(
+					r=rod,
+					h=width+2
+				);
 			}
-		}
-		
+			translate([
+				rod_gap+thickness*1.5,
+				-thickness,
+				-1
+			]) {
+				cube([
+					thickness*2+rod*2,
+					thickness+offset,
+					width+2,
+				]);
+			}
+			translate([
+				rod_gap+thickness+rod,
+				thickness+offset,
+				-1
+			]) {
+				cylinder(
+					r=rod,
+					h=width+2
+				);
+			}
 	}
+
 }
 
 function space1(length, pitch) = [
