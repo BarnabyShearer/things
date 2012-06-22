@@ -16,7 +16,7 @@ translate(	[
 	0
 ]) {
 	mount2(
-		rod_gap=164-2*m8,
+		rod_gap=158,
 		pitch = 44.5
 	);
 }
@@ -26,7 +26,7 @@ translate(	[
 	0
 ]) {
 	mount2(
-		rod_gap=164-2*m8,
+		rod_gap=158,
 		pitch = 44.5
 	);
 }
@@ -38,7 +38,7 @@ translate(	[
 	0
 ]) {
 	mount1(
-		rod_gap=164-2*m8,
+		rod_gap=158,
 		pitch = 70
 	);
 }
@@ -48,10 +48,83 @@ translate(	[
 	0
 ]) {
 	mount1(
-		rod_gap=164-2*m8,
+		rod_gap=158,
 		pitch = 70
 	);
 }
+
+for(i=[1:6]) {
+	translate([
+		i*20,
+		-80,
+		0
+	]) {
+		clip();
+	}
+}
+for(i=[1:6]) {
+	translate([
+		i*20,
+		-100,
+		0
+	]) {
+		clip();
+	}
+}
+
+
+module clip(
+	width = m3*4,
+	thickness = 2.2,
+	post = m3,
+	pcb = 1.7
+) {
+	cube([
+		thickness,
+		thickness*4+pcb,
+		post*2+thickness*2
+	]);
+	cube([
+		width+thickness*2,
+		thickness,
+		post*2+thickness*2,
+	]);
+	translate([
+		width+thickness,
+		0,
+		0,
+	]) {
+		cube([
+			thickness,
+			thickness*2,
+			post*2+thickness*2,
+			
+		]);
+	}
+	translate([
+		0,
+		thickness*3+pcb,
+		0,
+	]) {
+		cube([
+			post*2+thickness*2,
+			thickness,
+			thickness,
+		]);
+	}
+	translate([
+		post*2+thickness,
+		thickness*3+pcb,
+		0,
+	]) {
+		cube([
+			thickness,
+			thickness,
+			post*2+thickness*2,,
+		]);
+	}
+}
+	
 
 module mount1(
 	width = 10,

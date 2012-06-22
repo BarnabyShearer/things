@@ -17,6 +17,7 @@ difference() {
 	torus();
 	vortex();
 }
+translate([15,0,0])
 fan_mount();
 
 module fan_mount(
@@ -26,7 +27,8 @@ module fan_mount(
 	pitch = fan40_pitch,
 	thickness = 1.1,
 	height = 33,
-	offset = 52.6,
+	offset = 52.6+5,
+	drop = 3,
 	depth =10,
 	bolt = m3,
 	nut = m3_nut,
@@ -41,6 +43,17 @@ module fan_mount(
 				offset-r-r2+mount/2,
 				mount,
 				thickness*2 + depth,
+			]);
+		}
+		translate([
+			r-r2-1,
+			-mount/2-1,
+			height-drop,
+		]) {
+			cube([
+				offset-r-mount/2+1+r2,
+				mount+2,
+				drop+1,
 			]);
 		}
 		translate([
@@ -61,7 +74,7 @@ module fan_mount(
 			cube([
 				offset-r,
 				depth*2,
-				depth,
+				depth-drop,
 			]);
 		}
 		for(x=[0:1]) {
@@ -71,7 +84,7 @@ module fan_mount(
 					-pitch/2 + pitch *y,
 					height - thickness -thickness - depth-1,
 				]) {
-					#cylinder(
+					cylinder(
 						r = bolt,
 						h = thickness*2 + depth+2
 					);
@@ -93,7 +106,7 @@ module fan_mount(
 			]) {
 				cylinder(
 					r = mount/2 + r2*2+thickness,
-					h = thickness*2 + depth
+					h = thickness*2 + depth-drop
 				);
 			}
 			translate([
@@ -111,7 +124,7 @@ module fan_mount(
 		intersection() {
 			cylinder(
 				r = r + r2,
-				h = height-thickness
+				h = height-thickness-drop
 			);
 			translate([
 				r+mount/2 + r2,
@@ -127,7 +140,7 @@ module fan_mount(
 		translate([
 			r,
 			-depth,
-			height - thickness  - depth,
+			height - thickness  - depth-drop,
 		]) {
 			cube([
 				offset-r,
@@ -144,6 +157,7 @@ module torus(
 	thickness = 1.1,
 	mount = fan40,
 	height = 33,
+	drop = 3,
 	depth =10,
 ){
 	difference() {
@@ -174,7 +188,7 @@ module torus(
 			intersection() {
 				cylinder(
 					r = r + r2,
-					h = height-thickness
+					h = height-drop-thickness*2
 				);
 				translate([
 					r + mount/2 + r2,
@@ -183,7 +197,7 @@ module torus(
 				]) {
 					cylinder(
 						r = mount/2 + r2*2,
-						h = height-thickness
+						h = height-drop-thickness*2
 					);
 				}
 			}
@@ -219,7 +233,7 @@ module torus(
 			]) {
 				cylinder(
 					r = r + r2-thickness,
-					h = height-thickness
+					h = height-drop-thickness
 				);
 			}
 			translate([
@@ -229,14 +243,14 @@ module torus(
 			]) {
 				cylinder(
 					r = mount/2 + r2*2-thickness,
-					h = height-thickness
+					h = height-drop-thickness
 				);
 			}
 		}
 		translate([
 			r,
 			-depth,
-			height - thickness  - depth,
+			height - thickness- depth,
 		]) {
 			cube([
 				r2+1,
