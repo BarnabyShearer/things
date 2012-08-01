@@ -1,19 +1,20 @@
 /*
- * TVRRUG belt clamp
+ * belt clamp
+ *
+ * Clamp for the y-carriage incorporating a ratchet for easy tightening.
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
  *
  */
-
 $fn = 60;
+
 m3 = 3.6/2;
 m3_nut = 6.3 /2;
 
 hole_spacing = 18;
 
 mount();
-
 
 module mount(
 	width = 7,
@@ -112,12 +113,12 @@ module mount(
 			rotate([
 				0,
 				0,
-				45/2
+				180/6
 			]) {
 				cylinder(
 					h = 2,
 					r = nut,
-					$fn = 8
+					$fn = 6
 				);
 			}
 		}
@@ -129,12 +130,12 @@ module mount(
 			rotate([
 				0,
 				0,
-				45/2
+				180/6
 			]) {
 				cylinder(
 					h = 2,
 					r = nut,
-					$fn = 8
+					$fn = 6
 				);
 			}
 		}

@@ -1,5 +1,7 @@
 /*
- * TVRRUG fan duct
+ * fan duct
+ *
+ * Ducts the air to just below the hotend whilst taking the minimum of space.
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
@@ -17,8 +19,9 @@ difference() {
 	torus();
 	vortex();
 }
-translate([15,0,0])
-fan_mount();
+translate([15,0,0]) {
+	fan_mount();
+}
 
 module fan_mount(
 	r = 26,
@@ -33,120 +36,126 @@ module fan_mount(
 	bolt = m3,
 	nut = m3_nut,
 ) {
-	difference() {
-		translate([
-			r+r2,
-			-mount/2,
-			height - thickness -thickness - depth,
-		]) {
-			cube([
-				offset-r-r2+mount/2,
-				mount,
-				thickness*2 + depth,
-			]);
-		}
-		translate([
-			r-r2-1,
-			-mount/2-1,
-			height-drop,
-		]) {
-			cube([
-				offset-r-mount/2+1+r2,
-				mount+2,
-				drop+1,
-			]);
-		}
-		translate([
-			 + offset,
-			0,
-			height - thickness  - depth,
-		]) {
-			cylinder(
-				r = mount/2-thickness,
-				h = thickness+ depth +1
-			);
-		}
-		translate([
-			r,
-			-depth,
-			height - thickness  - depth,
-		]) {
-			cube([
-				offset-r,
-				depth*2,
-				depth-drop,
-			]);
-		}
-		for(x=[0:1]) {
-			for(y=[0:1]) {
-				translate([
-					offset - pitch/2 + pitch*x,
-					-pitch/2 + pitch *y,
-					height - thickness -thickness - depth-1,
-				]) {
-					cylinder(
-						r = bolt,
-						h = thickness*2 + depth+2
-					);
-					cylinder(
-						r = nut,
-						h = depth-2*thickness+1,
-						$fn=6
-					);
+	translate([
+		0,
+		0,
+		-height + depth+thickness*2
+	]) {
+		difference() {
+			translate([
+				r+r2,
+				-mount/2,
+				height - thickness -thickness - depth,
+			]) {
+				cube([
+					offset-r-r2+mount/2,
+					mount,
+					thickness*2 + depth,
+				]);
+			}
+			translate([
+				r-r2-1,
+				-mount/2-1,
+				height-drop,
+			]) {
+				cube([
+					offset-r-mount/2+1+r2,
+					mount+2,
+					drop+1,
+				]);
+			}
+			translate([
+				 + offset,
+				0,
+				height - thickness  - depth,
+			]) {
+				cylinder(
+					r = mount/2-thickness,
+					h = thickness+ depth +1
+				);
+			}
+			translate([
+				r,
+				-depth,
+				height - thickness  - depth,
+			]) {
+				cube([
+					offset-r,
+					depth*2,
+					depth-drop,
+				]);
+			}
+			for(x=[0:1]) {
+				for(y=[0:1]) {
+					translate([
+						offset - pitch/2 + pitch*x,
+						-pitch/2 + pitch *y,
+						height - thickness -thickness - depth-1,
+					]) {
+						cylinder(
+							r = bolt,
+							h = thickness*2 + depth+2
+						);
+						cylinder(
+							r = nut,
+							h = depth-2*thickness+1,
+							$fn=6
+						);
+					}
 				}
 			}
 		}
-	}
-	difference() {
 		difference() {
-			translate([
-				r+ mount/2 + r2,
-				0,
-				height - thickness -thickness - depth,
-			]) {
+			difference() {
+				translate([
+					r+ mount/2 + r2,
+					0,
+					height - thickness -thickness - depth,
+				]) {
+					cylinder(
+						r = mount/2 + r2*2+thickness,
+						h = thickness*2 + depth-drop
+					);
+				}
+				translate([
+					r+  r2,
+					-mount,
+					-1,
+				]) {
+					cube([
+						mount*2,
+						mount*2,
+						height+2,
+					]);
+				}
+			}
+			intersection() {
 				cylinder(
-					r = mount/2 + r2*2+thickness,
-					h = thickness*2 + depth-drop
+					r = r + r2,
+					h = height-thickness-drop
 				);
+				translate([
+					r+mount/2 + r2,
+					0,
+					0,
+				]) {
+					cylinder(
+						r = mount/2 + r2*2,
+						h = height-thickness
+					);
+				}
 			}
 			translate([
-				r+  r2,
-				-mount,
-				-1,
+				r,
+				-depth,
+				height - thickness  - depth-drop,
 			]) {
 				cube([
-					mount*2,
-					mount*2,
-					height+2,
+					offset-r,
+					depth*2,
+					depth,
 				]);
 			}
-		}
-		intersection() {
-			cylinder(
-				r = r + r2,
-				h = height-thickness-drop
-			);
-			translate([
-				r+mount/2 + r2,
-				0,
-				0,
-			]) {
-				cylinder(
-					r = mount/2 + r2*2,
-					h = height-thickness
-				);
-			}
-		}
-		translate([
-			r,
-			-depth,
-			height - thickness  - depth-drop,
-		]) {
-			cube([
-				offset-r,
-				depth*2,
-				depth,
-			]);
 		}
 	}
 }

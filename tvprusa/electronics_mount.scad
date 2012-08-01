@@ -1,16 +1,17 @@
 /*
- * TVRRUG electronics mount
+ * electronics mount
+ *
+ * Mounts the electrons inside the frame under the bed.
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
  */
-
 $fn = 60;
+
 m8 = 7.80 / 2;
 m3 = 2.8 /2;
 
 //http://solderpad.com/folknology/dual-stepper-motor-module/
-
 translate(	[
 	0,
 	20,
@@ -21,7 +22,7 @@ translate(	[
 		pitch = 44.5
 	);
 }
-/*
+
 translate(	[
 	0,
 	60,
@@ -56,79 +57,6 @@ translate(	[
 		pitch = 70
 	);
 }
-
-for(i=[1:6]) {
-	translate([
-		i*20,
-		-80,
-		0
-	]) {
-		clip();
-	}
-}
-for(i=[1:6]) {
-	translate([
-		i*20,
-		-100,
-		0
-	]) {
-		clip();
-	}
-}
-*/
-
-module clip(
-	width = m3*4,
-	thickness = 2.2,
-	post = m3,
-	pcb = 1.7
-) {
-	cube([
-		thickness,
-		thickness*4+pcb,
-		post*2+thickness*2
-	]);
-	cube([
-		width+thickness*2,
-		thickness,
-		post*2+thickness*2,
-	]);
-	translate([
-		width+thickness,
-		0,
-		0,
-	]) {
-		cube([
-			thickness,
-			thickness*2,
-			post*2+thickness*2,
-			
-		]);
-	}
-	translate([
-		0,
-		thickness*3+pcb,
-		0,
-	]) {
-		cube([
-			post*2+thickness*2,
-			thickness,
-			thickness,
-		]);
-	}
-	translate([
-		post*2+thickness,
-		thickness*3+pcb,
-		0,
-	]) {
-		cube([
-			thickness,
-			thickness,
-			post*2+thickness*2,,
-		]);
-	}
-}
-	
 
 module mount1(
 	width = 10,

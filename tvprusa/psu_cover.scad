@@ -1,10 +1,11 @@
 /*
- * TVRRUG PSU cover (SUNPOWER FDP3-350A)
+ * psu cover
+ *
+ * Minimal faceplate for the SUNPOWER FDP3-350A.
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
  */
-
 $fn = 60;
 
 translate([

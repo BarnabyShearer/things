@@ -1,11 +1,13 @@
 /*
- * TVRRUG PSU mount
+ * psu mount
+ *
+ * Mounts a SUNPOWER FDP3-350A inside the frame under the bed.
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
  */
-
 $fn = 60;
+
 m8 = 7.80 / 2;
 m4 = 3.8 /2;
 
@@ -182,7 +184,7 @@ module back(
 						h=length
 					);
 				}
-				#translate(	[
+				translate(	[
 					-rod,
 					0,
 					0

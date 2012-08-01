@@ -1,16 +1,17 @@
 /*
- * TVRRUG extruder mount
+ * bowden extruder mount
+ *
+ * Mount the extruder onto the top threaded-rod and attach a bowden cable to
+ * the x-carriage.
+ *
+ * Serendipitously you can just run an M6 nyloc nut onto the end of the PTFE
+ * tube for a perfect grip
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
  */
-
-/*
- * Serendipitously you can just run an M6 nyloc nut onto the end of the PTFE
- * tube for a perfect grip
- */
-
 $fn = 60;
+
 m8 = 8 / 2;
 m4 = 4.2 /2;
 m3 = 3.2 /2;
@@ -19,6 +20,13 @@ m6_nyloc = [
 	6
 ];
 
+translate([
+	0,
+	60,
+	0
+]) {
+	mount(offset=-8);
+}
 translate([
 	0,
 	20,

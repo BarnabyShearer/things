@@ -1,49 +1,53 @@
+echo("\r\rWIP: The large belt offset causes twisting forces result in a
+ reduced working life.\r\r");
+
 /*
- * TVRRUG x-axis carriage
+ * x carriage
+ *
+ * Lightweight x carriage for my hotend mount.
  *
  * Copyright 2012 <b@Zi.iS>
  * License GPLv2
  *
- * Based on http://www.thingiverse.com/thing:4434 by whosawhatsis
+ * incorporating http://www.thingiverse.com/thing:4434 by whosawhatsis
  */
-
 $fn = 60;
+
 m8 = 8/2;
 m3 = 3.6/2;
 m4 = 4.6/2;
 m3_nut = 6.1 /2;
 fan40_gap = 32;
 
-/*
 translate([
 	10,
-	-30,
+	-20,
 	0
 ]) {
 	belt_guide();
 }
 translate([
 	-10,
-	-30,
+	-20,
 	0
 ]) {
 	belt_guide();
 }
 translate([
 	10,
-	-50,
+	-30,
 	0
 ]) {
 	belt_clamp();
 }
 translate([
 	-10,
-	-50,
+	-30,
 	0
 ]) {
 	belt_clamp();
 }
-*/
+
 carriage();
 
 translate([
@@ -198,7 +202,7 @@ module belt_clamp(
 			cylinder(
 				r = nut,
 				h = 3,
-				$fn = 8
+				$fn = 6
 			);
 		}
 		translate([
@@ -209,7 +213,7 @@ module belt_clamp(
 			cylinder(
 				r = nut,
 				h = 3,
-				$fn = 8
+				$fn = 6
 			);
 		}
 
@@ -433,7 +437,7 @@ module carriage(
 				cylinder(
 					r = clamp_nut,
 					h =clamp_bolt*4 +2,
-					$fn =8
+					$fn = 6
 				);
 			}
 		}

@@ -1,5 +1,7 @@
 /*
- * TVRRUG filament guide
+ * filament guide
+ *
+ * Ensures the filament feeds into into the extruder strait.
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0

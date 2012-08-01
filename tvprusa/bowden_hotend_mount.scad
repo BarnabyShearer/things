@@ -1,15 +1,14 @@
 /*
- * TVRRUG hotend cable mount
+ * bowden hotend mount
+ *
+ * Replace the extruder on the x-carriage with a bowden cable.
+ *
+ * Serendipitously you can just run an M6 nyloc nut onto the end of the PTFE
+ * tube for a perfect grip
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
  */
-
-/*
- * Serendipitously you can just run an M6 nyloc nut onto the end of the PTFE
- * tube for a perfect grip
- */
-
 $fn = 60;
 
 m3 = 3.2 /2;
@@ -24,6 +23,13 @@ rotate([
 	0
 ]) {
 	mount();
+	translate([
+		0,
+		0,
+		20
+	]) {
+		mount();
+	}
 }
 
 module mount(

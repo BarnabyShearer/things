@@ -1,23 +1,36 @@
 /*
- * TVRRUG clamp
+ * clamp
+ *
+ * Stronger clamp which tightens against both rods to improve frame rigidity.
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
+ *
+ * Inspired by Michel Pollet <buserror@gmail.com>
  */
-
 $fn = 60;
+
 m8 = 8 / 2;
 m8_washer = 15/2;
 
-clamp();
 
-translate([
-	-11,
-	10,
-	0
-]) {
-	
-	clamp2();
+for(x=[0:3]) {
+	for(y=[0:1]) {
+		translate([
+			x*20,
+			y*50,
+			0
+		]) {
+			clamp();
+			translate([
+				-11,
+				10,
+				0
+			]) {
+				clamp2();
+			}
+		}
+	}
 }
 
 module clamp(

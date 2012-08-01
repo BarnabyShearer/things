@@ -1,10 +1,16 @@
 /*
- * TVRRUG hotend mount
+ * hotend mount
+ *
+ * NOTE: This needs to be milled out of a rigid heat resistant material.
+ * It is tested with MDF.
+ *
+ * Mounts a j-head hotend via the notch at the top of barrel.
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
  */
 $fn=60;
+
 m4 = 4.6/2;
 
 translate([
@@ -12,7 +18,13 @@ translate([
 	0,
 	-6.5
 ]) {
-	//support1();
+	support1();
+}
+translate([
+    75,
+    0,
+    -6.5
+]) {
 	support2();
 }
 

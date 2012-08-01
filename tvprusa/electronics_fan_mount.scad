@@ -1,11 +1,13 @@
 /*
- * TVRRUG Fan mount
+ * electronics fan mount
+ *
+ * Mounts a cooling fan onto the frame.
  *
  * Copyright 2012 <b@Zi.iS>
  * License CC BY 3.0
  */
-
 $fn = 60;
+
 m8 = 7.80 / 2;
 m3 = 3.5 / 2;
 
