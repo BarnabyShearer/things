@@ -14,6 +14,7 @@ m4 = 4.6/2;
 m3_nut = 6.1 /2;
 fan40_gap = 32;
 
+/*
 translate([
 	10,
 	-30,
@@ -42,7 +43,7 @@ translate([
 ]) {
 	belt_clamp();
 }
-
+*/
 carriage();
 
 translate([
@@ -258,6 +259,7 @@ module carriage(
 	support_hole = 10.5, //to edge
 	fan_hole = (50-fan40_gap)/2,
 	fan_bolt = m3,
+	hang = 1.5,
 	clamp_offset = 12.5,
 	clamp_pitch = 10,
 	clamp_bolt = m3,
@@ -269,7 +271,7 @@ module carriage(
 
 	difference() {
 		union() {
-			translate([
+		translate([
 				-rod_gap/2,
 				0,
 				0
@@ -310,18 +312,18 @@ module carriage(
 			}
 			translate([
 				(rod_gap/2 + rod*2) * -clamp_pos - (clamp_pos>0 ? fan_bolt*4-.002:0)-.001,
-				rod*2-bushing_thickness,
+				rod*2-bushing_thickness-hang,
 				0
 			]){
 				cube([
 					fan_bolt*4,
-					thickness*2,
+					thickness*2+hang,
 					height + fan_bolt*4
 				]);
 			}
 		}
 	
-		translate([
+	translate([
 			-support_width/2,
 			rod*2-bushing_thickness+thickness,
 			thickness
@@ -361,10 +363,11 @@ module carriage(
 			]) {
 				cylinder(
 					r = fan_bolt,
-					h=thickness*2+2
+					h=thickness*2+2+hang
 				);
 			}
 		}
+
 	}
 
 	clamp_width = clamp_pitch + clamp_bolt*4;
