@@ -5,22 +5,30 @@
  * License CC BY 3.0
  */
 
+/*
+ * Serendipitously you can just run an M6 nyloc nut onto the end of the PTFE
+ * tube for a perfect grip
+ */
+
 $fn = 60;
 m8 = 8 / 2;
 m4 = 4.2 /2;
 m3 = 3.2 /2;
+m6_nyloc = [
+	11.28 /2,
+	6
+];
 
-mount();
 translate([
 	0,
-	35,
+	20,
 	0
 ]) {
 	mount(offset=-8);
 }
 translate([
 	0,
-	-30,
+	-10,
 	0
 ]) {
 	clamp();
@@ -28,13 +36,15 @@ translate([
 
 module clamp(
 	rod=m8,
-	bowden=6.5/2,
-	bolt = m3
+	bowden=5.6/2,
+	bowden_nut = m6_nyloc,
+	bolt = m3,
+	t=3
 ) {
 	cable_pitch =  bowden*2+bolt*4;
 	width = bowden*2+bolt*8;
 	length = rod*2+bolt*8;
-	height = bowden*2;
+	height = bowden_nut[0] + t;
 
 	difference() {
 		translate([
@@ -65,6 +75,25 @@ module clamp(
 			}
 		}
 
+		//bowden nut	
+		translate([
+			0,
+			bowden_nut[1]/2,
+			height
+		]) {
+			rotate([
+				90,
+				0,
+				0
+			]) {
+				cylinder(
+					r = bowden_nut[0],
+					h = bowden_nut[1],
+					$fn = 6
+				);
+			}
+		}
+
 		//cable
 		translate([
 			0,
@@ -92,11 +121,13 @@ module mount(
 	offset = 8,
 	pitch = 50,
 	bowden=6.5/2,
+	bowden_nut = m6_nyloc,
 	bowden_bolt = m3,
 ) {
 	height = rod+bowden_bolt*3;
 	cable_clamp = bowden*2+bowden_bolt*8;
 	cable_pitch =  bowden*2+bowden_bolt*4;
+	rod_offset = -rod*2- bowden_nut[0]*sqrt(3)*.5;
 
 	difference() {
 		translate([
@@ -109,6 +140,19 @@ module mount(
 				width,
 				height
 			]);
+		}
+
+		//bowden nut	
+		translate([
+			0,
+			0,
+			height-bowden_nut[1]/2
+		]) {
+			cylinder(
+				r = bowden_nut[0],
+				h = bowden_nut[1],
+				$fn = 6
+			);
 		}
 		
 		//cable
@@ -175,7 +219,7 @@ module mount(
 		//Rod
 		translate([
 			-length/2-offset/2-1,
-			-width/2+rod*2,
+			rod_offset+rod,
 			height
 		]) {
 			rotate([
@@ -194,7 +238,7 @@ module mount(
 		for(x=[0:1]) {
 			translate([
 				-bowden-bowden_bolt*3+cable_pitch*x,
-				-width/2+rod,
+				rod_offset,
 				height-rod-bowden_bolt
 			]) {
 				cube([
