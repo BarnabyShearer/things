@@ -10,6 +10,7 @@ m8 = 7.80 / 2;
 m3 = 2.8 /2;
 
 //http://solderpad.com/folknology/dual-stepper-motor-module/
+
 translate(	[
 	0,
 	20,
@@ -20,6 +21,7 @@ translate(	[
 		pitch = 44.5
 	);
 }
+/*
 translate(	[
 	0,
 	60,
@@ -42,6 +44,8 @@ translate(	[
 		pitch = 70
 	);
 }
+
+
 translate(	[
 	0,
 	-60,
@@ -71,7 +75,7 @@ for(i=[1:6]) {
 		clip();
 	}
 }
-
+*/
 
 module clip(
 	width = m3*4,
@@ -141,7 +145,7 @@ module mount1(
 		rod_gap = rod_gap,
 		rod = rod,
 		post = post,
-		posts= space1(rod_gap, pitch),
+		posts= space1(rod_gap-thickness*2-rod*2, pitch),
 		offset = offset
 	);
 }
@@ -161,7 +165,7 @@ module mount2(
 		rod_gap = rod_gap,
 		rod = rod,
 		post = post,
-		posts= space2(rod_gap, pitch, pitch),
+		posts= space2(rod_gap-thickness*2-rod*2, pitch, pitch),
 		offset = offset
 	);
 }
@@ -241,7 +245,7 @@ module post(
 }
 
 module support(
-	rod_gap = 165-2*m8,
+	rod_gap = 156,
 	rod = m8,
 	width = m3*4,
 	offset = 10,
@@ -250,7 +254,7 @@ module support(
 	difference() {
 		union() {
 			cube([
-				rod_gap,
+				rod_gap-thickness*2-rod*2,
 				thickness,
 				width,
 			]);
@@ -276,7 +280,7 @@ module support(
 				);
 			}
 			translate([
-				rod_gap,
+				rod_gap-thickness*2-rod*2,
 				0,
 				0
 			]) {
@@ -287,7 +291,7 @@ module support(
 				]);
 			}
 			translate([
-				rod_gap+thickness+rod,
+				rod_gap+thickness+rod-thickness*2-rod*2,
 				thickness+offset,
 				0
 			]) {
@@ -320,7 +324,7 @@ module support(
 				);
 			}
 			translate([
-				rod_gap+thickness*1.5,
+				rod_gap+thickness*1.5-thickness*2-rod*2,
 				-thickness,
 				-1
 			]) {
@@ -331,7 +335,7 @@ module support(
 				]);
 			}
 			translate([
-				rod_gap+thickness+rod,
+				rod_gap+thickness+rod-thickness*2-rod*2,
 				thickness+offset,
 				-1
 			]) {
