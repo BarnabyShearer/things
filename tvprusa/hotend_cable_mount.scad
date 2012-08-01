@@ -5,187 +5,104 @@
  * License CC BY 3.0
  */
 
+/*
+ * Serendipitously you can just run an M6 nyloc nut onto the end of the PTFE
+ * tube for a perfect grip
+ */
+
 $fn = 60;
-m8 = 8 / 2;
-m4 = 4.2 /2;
+
 m3 = 3.2 /2;
+m6_nyloc = [
+	11.28 /2,
+	6
+];
 
-mount();
-
-translate([
+rotate([
+	-90,
 	0,
-	-17,
 	0
 ]) {
-	clamp();
+	mount();
 }
 
-module clamp(
-	bowden=6.5/2,
+module mount(
 	bolt = m3,
-	thickness = 2
+	pitch = 50,
+	bowden = 5.6/2,
+	bowden_nut = m6_nyloc,
+	hotend = [17.5/2, 3.5],
+	t = 3
 ) {
-	cable_pitch =  bowden*2+bolt*4;
-	length = bowden*2+bolt*8;
-	width = bolt*4;
-	height = bowden+thickness;
+	size = [
+		pitch + bolt*2 + t*2,
+		hotend[0]*2 + t*2,
+		hotend[1] + bowden_nut[1] + t*2
+	];
 
 	difference() {
 		translate([
-			-length/2,
-			-width/2,
+			-size[0]/2,
+			0,
 			0
 		]) {
 			cube([
-				length,
-				width,
-				height
+				size[0],
+				size[1]/2,
+				size[2]
 			]);
 		}
 
-		//bolts
-		for(x=[0:1]) {
-			translate([
-				-cable_pitch/2+cable_pitch*x,
-				0,
-				-1
-			]) {
-				cylinder(
-					r=bolt,
-					h=height+2
-				);
-			}
-		}
-
-		//cable
+		//bowden nut	
 		translate([
 			0,
-			-width/2-1,
-			height
+			0,
+			hotend[1] + t
 		]) {
-			rotate([
-				-90,
-				0,
-				0
-			]) {
-				cylinder(
-					r = bowden,
-					h = width+2
-				);
-			}
+			cylinder(
+				r = bowden_nut[0],
+				h = bowden_nut[1],
+				$fn = 6
+			);
 		}
-	}
-}
-module mount(
-	bolt = m4,
-	pitch = 50,
-	bowden=6.5/2,
-	bowden_bolt = m3,
-	hotend = 17.5/2,
-	hotend_length = 3.5,
-	thickness = 2
-) {
-	height = thickness;
-	width = bolt*4;
+	
+		translate([
+			0,
+			0,
+			-1
+		]) {
+			//hotend
+			cylinder(
+				r = hotend[0],
+				h = hotend[1]+1
+			);
+			//bowden
+			cylinder(
+				r = bowden,
+				h = size[2]+2
+			);
 
-	difference() {
-		union() {
-			translate([
-				-pitch/2,
-				-width/2,
-				0
-			]) {
-				cube([
-					pitch,
-					width,
-					height
-				]);
-			}
-			//mounting bolts
+			//x-carrage bolts
 			for(x=[0:1]) {
 				translate([
-					-pitch/2 + pitch*x,
+					-pitch/2 + x*pitch,
 					0,
 					0
 				]) {
 					cylinder(
-						r = bolt+thickness,
-						h =height
+						r = bolt,
+						h = size[2]+2
 					);
 				}
 			}
-
-			//Hotend
-			translate([
-				0,
-				0,
-				0
-			]) {
-				cylinder(
-					r = hotend+thickness,
-					h = hotend_length+thickness
-				);
-			}
-
-			//cable
-			translate([
-				-bowden-bowden_bolt*4,
-				0,
-				0
-			]) {
-				cube([
-					bowden*2+bowden_bolt*8,
-					bowden+bowden_bolt,
-					 hotend_length+thickness+bowden_bolt*4
-				]);
-			}
-		}		
-
-		//cable
-		translate([
-			0,
-			0,
-			-1
-		]) {
-			cylinder(
-				r = bowden,
-				h = hotend_length+thickness+bowden_bolt*4+2
-			);
 		}
 
-		//Hotend
-		translate([
-			0,
-			0,
-			-1
-		]) {
-			cylinder(
-				r = hotend,
-				h = hotend_length+1
-			);
-		}
-
-		//mounting bolts
-		for(x=[0:1]) {
+		//bolts
+		for(x=[0:1]){
 			translate([
-				-pitch/2 + pitch*x,
-				0,
-				-1
-			]) {
-				cylinder(
-					r = bolt,
-					h =height+2
-				);
-			}
-		}
-
-
-		//Cable bolts
-		for(x=[0:1]) {
-			translate([
-				-bowden-bowden_bolt*2 + (bowden_bolt*4+bowden*2)*x,
+				-size[0]/4 + size[0]/2*x,
 				-1,
-				 hotend_length+thickness+bowden_bolt*2
+				size[2]/2
 			]) {
 				rotate([
 					-90,
@@ -193,12 +110,12 @@ module mount(
 					0
 				]) {
 					cylinder(
-						r = bowden_bolt,
-						h =bowden+thickness+2
+						r = bolt,
+						h = size[1]
 					);
 				}
 			}
 		}
-
 	}
 }	
+
