@@ -1,5 +1,3 @@
-echo("\r\rWIP: This is untested\r\r");
-
 /*
  * extruder
  *
@@ -10,8 +8,9 @@ echo("\r\rWIP: This is untested\r\r");
  */
 $fn=60;
 
+nylock = [11.3/2, 6 ];
 m8 = 8 /2;
-m3 = 3.2 /2;
+m3 = 3.6 /2;
 bearing608 = [
 	4,				//ID
 	11, 			//OD
@@ -27,10 +26,12 @@ nema17 = [
 
 extruder();
 
+
 module extruder(
 	bearing = bearing608,
 	bolt = m3,
 	filament = 3/2,
+	nut = nylock,
 	clamp = 12.5,
 	bowden = 6.5/2,
 	gear_pitch = 40,
@@ -39,9 +40,9 @@ module extruder(
 	t = 1.5
 ) {
 	cable_pitch = bowden*2+bolt*4;
-	bearing_y = bolt*2+t*2+clamp+t+bearing[1];
+	bearing_y = bolt*3+t*2+clamp+t+bearing[1];
 	size = [
-		bearing[1]*2 + t,
+		bearing[1]*2 + t*2,
 		bearing_y + bearing[1] + t,
 		bearing[2]*3 + t*2
 	];
@@ -92,37 +93,42 @@ module extruder(
 
 			//rod rail
 			translate([
-				-bolt*3-t*4,
-				-rod,
+				0,
+				-rod*2,
 				0
 			]) {
 				cube([
-					motor_x+motor[1],
-					rod,
-					rod*2+t
+					motor_x+motor[0]/2+1,
+					rod*2,
+					t*2
 				]);
 			}
-			translate([
-				-bolt*3-t*4,
-				-rod,
-				0
-			]) {
-				cube([
-					bolt*2+t*4,
-					rod,
-					rod*2+t*2+bolt*3
-				]);
-			}
-			translate([
-				motor_x/2-bolt*2,
-				-rod,
-				0
-			]) {
-				cube([
-					bolt*2+t*4,
-					rod,
-					rod*2+t*2+bolt*3
-				]);
+
+			//rod bolts
+			for(x=[0:1]) {
+				translate([
+					motor_x+motor[0]/2-(motor[0]+bolt*4)*x,
+					-rod*2-bolt*2,
+					0
+				]) {
+					cube([
+						bolt*4,
+						rod*2+bolt*4,
+						rod+t
+					]);
+				}
+				for(y=[0:1]) {
+					translate([
+						motor_x+motor[0]/2-(motor[0]+bolt*4)*x + bolt*2,
+						-rod*2-bolt*2 + (rod*2+bolt*4)*y,
+						0
+					]) {
+						cylinder(
+							r = bolt*2,
+							h=rod + t
+						);
+					}
+				}
 			}
 
 			//spring holder
@@ -140,27 +146,29 @@ module extruder(
 
 			//motor holder
 			translate([
-				size[0]/2,
+				size[0]/2-1,
 				0,
 				0
 			]) {
 				cube([
-					motor_x-size[0]/2-motor[1]/2,
+					motor_x-size[0]/2-motor[1]/2+1,
 					motor[0]/2 - motor[1]/2 + motor[1] + bolt + t,
 					t*2
 				]);
 			}
+
 			translate([
-				motor_x+motor[1]-bolt*5-t*8,
+				motor_x-motor[1]/2 +motor[1]-  motor[2] - t*2,
 				0,
 				0
 			]) {
 				cube([
-					bolt*2 + t*4,
+					bolt*2 + t*4+5,
 					(motor[0]-motor[1])/2,
 					t*2
 				]);
 			}
+
 			//motor bolts
 			for(y=[0:1]) {
 				translate([
@@ -236,13 +244,13 @@ module extruder(
 
 			//cable bolt attachemnt
 			translate([
-				filament_x - cable_pitch/2,
-				bolt+t,
+				filament_x - cable_pitch/2-1,
+				0,
 				0
 			]) {
 				cube([
-					cable_pitch,
-					clamp,
+					cable_pitch+2,
+					clamp+bolt+t,
 					size[2]/2
 				]);
 			}
@@ -265,7 +273,7 @@ module extruder(
 
 			//pivot
 			translate([
-				filament_x-filament-bearing[1],
+				filament_x-filament-bearing[1]-4,
 				bolt+t+clamp/2,
 				0
 			]) {
@@ -275,12 +283,12 @@ module extruder(
 				);
 			}
 			translate([
-				filament_x-filament-bearing[1],
+				filament_x-filament-bearing[1]-4,
 				bolt+t+clamp/2 - (bolt + t),
 				0
 			]) {
 				cube([
-					filament_x-filament-t*2 - (filament_x-filament-bearing[1]) +1,
+					filament_x-filament-t*2 - (filament_x-filament-bearing[1]) +5,
 					bolt*2 + t*2,
 					size[2]/2
 				]);
@@ -291,8 +299,8 @@ module extruder(
 		//rod
 		translate([
 			-50,
-			-rod-t,
-			size[2]/2-bowden-rod
+			-rod,
+			rod + t*2
 		]) {
 			rotate([
 				0,
@@ -311,36 +319,18 @@ module extruder(
 		}
 
 		//rod bolts
-		translate([
-			-bolt*2-t*2,
-			-rod-1,
-			rod*2+t+bolt
-		]) {
-			rotate([
-				-90,
-				0,
-				0
-			]) {
-				cylinder(
-					r = bolt,
-					h = rod  + 2
-				);				
-			}
-		}
-		translate([
-			motor_x/2-bolt+t*2,
-			-rod-1,
-			rod*2+t+bolt
-		]) {
-			rotate([
-				-90,
-				0,
-				0
-			]) {
-				cylinder(
-					r = bolt,
-					h = rod  + 2
-				);				
+		for(x=[0:1]) {
+			for(y=[0:1]) {
+				translate([
+					bolt*2 + motor_x+motor[0]/2-(motor[0]+bolt*4)*x,
+					bolt*2 - (bolt*4+rod*2)*y,
+					-1
+				]) {
+					cylinder(
+						r = bolt,
+						h = rod+t + 2
+					);				
+				}
 			}
 		}
 
@@ -366,6 +356,25 @@ module extruder(
 				cylinder(
 					r = bowden,
 					h = clamp+bolt*2+t*2+1
+				);
+			}
+		}
+		
+		//filament retaining nut
+		translate([
+			filament_x,
+			clamp/2,
+			size[2]/2
+		]) {
+			rotate([
+				-90,
+				0,
+				0
+			]) {
+				cylinder(
+					r = nut[0],
+					h = nut[1],
+					$fn = 6
 				);
 			}
 		}
@@ -453,7 +462,7 @@ module extruder(
 
 		//pivot
 		translate([
-			filament_x-filament-bearing[1],
+			filament_x-filament-bearing[1]-4,
 			bolt+t+clamp/2,
 			-1
 		]) {
@@ -509,7 +518,7 @@ module extruder(
 
 	translate([
 		0,
-		-10,
+		-16,
 		size[2]
 	]) {
 		rotate([
@@ -532,7 +541,7 @@ module extruder(
 
 	translate([
 		-5,
-		-25,
+		-30,
 		0
 	]) {
 		bowden_clamp(
@@ -543,15 +552,10 @@ module extruder(
 			t = t
 		);
 	}
-
-	translate([
-		-15,
-		-37,
-		0
-	]) {
-		rotate([
-			-90,
-			0,
+	for(x=[0:1]) {
+		translate([
+			-20+10*x,
+			30,
 			0
 		]) {
 			rod_clamp(
@@ -569,48 +573,30 @@ module extruder(
 module rod_clamp() {
 	difference() {
 		union() {
-
-			//rod rail
-			translate([
-				-bolt*3-t*4,
-				-rod,
-				0
-			]) {
-				cube([
-					motor_x/2-bolt*2+bolt*3+t*4,
-					rod,
-					rod*2+t
-				]);
-			}
-			translate([
-				-bolt*3-t*4,
-				-rod,
-				0
-			]) {
-				cube([
-					bolt*2+t*4,
-					rod,
-					rod*2+t*2+bolt*3
-				]);
-			}
-			translate([
-				motor_x/2-bolt*2,
-				-rod,
-				0
-			]) {
-				cube([
-					bolt*2+t*4,
-					rod,
-					rod*2+t*2+bolt*3
-				]);
+			cube([
+				bolt*4,
+				rod*2+bolt*4,
+				rod + t					
+			]);
+			for(y=[0:1]) {
+				translate([
+					bolt*2,
+					 (rod*2+bolt*4)*y,
+					0
+				]) {
+					cylinder(
+							r = bolt*2,
+						h=rod + t
+					);
+				}
 			}
 		}
 
 		//rod
 		translate([
-			-50,
-			-rod-t,
-			size[2]/2-bowden-rod
+			-1,
+			-bolt*2 + rod + bolt*4,
+			rod + t
 		]) {
 			rotate([
 				0,
@@ -619,49 +605,30 @@ module rod_clamp() {
 			]) {
 				cylinder(
 					r = rod,
-					h = 150
+					h = bolt*4 + 2
 				);
 			}
 		}
 
 		//rod bolts
-		translate([
-			-bolt*2-t*2,
-			-rod-1,
-			rod*2+t+bolt
-		]) {
-			rotate([
-				-90,
-				0,
-				0
+		for(x=[0:1]) {
+			translate([
+				bolt*2,
+				(bolt*4 + rod*2)*x,
+				-1
 			]) {
 				cylinder(
 					r = bolt,
-					h = rod  + 2
+					h = rod + t + 2
 				);				
 			}
 		}
-		translate([
-			motor_x/2-bolt+t*2,
-			-rod-1,
-			rod*2+t+bolt
-		]) {
-			rotate([
-				-90,
-				0,
-				0
-			]) {
-				cylinder(
-					r = bolt,
-					h = rod  + 2
-				);				
-			}
-		}
-
 	}
 }
 
-module bowden_clamp() {
+module bowden_clamp(nut = nylock) {
+	height = nut[1]+t;
+
 	difference() {
 		union() {
 			//block
@@ -673,7 +640,7 @@ module bowden_clamp() {
 				cube([
 					cable_pitch,
 					clamp+bolt*2+t*2,
-					bowden+t*2
+					height
 				]);
 			}
 
@@ -687,7 +654,7 @@ module bowden_clamp() {
 					]) {
 						cylinder(
 							r = bolt+t,
-							h = bowden+t*2
+							h = height
 						);
 					}
 				}
@@ -703,7 +670,7 @@ module bowden_clamp() {
 				]) {
 					cylinder(
 						r = bolt,
-						h = bowden+t*2+2
+						h = height+2
 					);
 				}
 			}
@@ -712,7 +679,7 @@ module bowden_clamp() {
 		translate([
 			0,
 			-1,
-			t*2+bowden
+			height
 		]) {
 			rotate([
 				-90,
@@ -722,6 +689,24 @@ module bowden_clamp() {
 				cylinder(
 					r = bowden,
 					h = clamp+bolt*2+t*2+2
+				);
+			}
+		}
+		//filament retaining nut
+		translate([
+			0,
+			clamp/2,
+			height
+		]) {
+			rotate([
+				-90,
+				0,
+				0
+			]) {
+				cylinder(
+					r = nut[0],
+					h = nut[1],
+					$fn = 6
 				);
 			}
 		}
@@ -737,7 +722,7 @@ module extruder_arm() {
 			//bearing
 			%translate([
 				filament_x-filament-bearing[1],
-				bearing_y,
+				bearing_y+1,
 				bearing[2] + t
 			]) {
 				cylinder(
@@ -749,7 +734,7 @@ module extruder_arm() {
 			//bearing holder
 			translate([
 				filament_x-filament-bearing[1],
-				bearing_y,
+				bearing_y+1,
 				bearing[2] + t
 			]) {
 				cylinder(
@@ -761,11 +746,11 @@ module extruder_arm() {
 			//bearing sholder
 			translate([
 				filament_x-filament-bearing[1],
-				bearing_y,
+				bearing_y+1,
 				size[2] - bearing[2] - t
 			]) {
 				cylinder(
-					r = bearing[0] + t/10,
+					r = bearing[0] + t/5,
 					h = bearing[2] + t
 				);
 			}
@@ -797,8 +782,8 @@ module extruder_arm() {
 
 			//pivot
 			translate([
-				filament_x-filament-bearing[1],
-				bolt+t+clamp/2,
+				filament_x - filament-bearing[1] ,
+				bolt*3 + 4,
 				size[2]/2
 			]) {
 				cylinder(
@@ -811,7 +796,7 @@ module extruder_arm() {
 		//pivot
 		translate([
 			filament_x-filament-bearing[1],
-			bolt+t+clamp/2,
+			bolt*3 + 4,
 			size[2]/2-1
 		]) {
 			cylinder(

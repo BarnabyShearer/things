@@ -15,7 +15,7 @@ m8_washer = 15/2;
 
 
 for(x=[0:3]) {
-	for(y=[0:1]) {
+	for(y=[0:0]) {
 		translate([
 			x*20,
 			y*50,
@@ -40,7 +40,7 @@ module clamp(
 	height=rod*3+thickness;
 	width=rod*2+thickness*2;
 
-	difference() {
+	translate([0,0,height/2]) rotate([0,-90,0]) difference() {
 		union() {
 
 			translate([
