@@ -14,7 +14,7 @@ m8 = 8 / 2;
 m8_washer = 15/2;
 
 
-for(x=[0:3]) {
+for(x=[0:0]) {
 	for(y=[0:0]) {
 		translate([
 			x*20,
@@ -23,8 +23,8 @@ for(x=[0:3]) {
 		]) {
 			clamp();
 			translate([
-				-11,
-				10,
+				-17,
+				12,
 				0
 			]) {
 				clamp2();
@@ -50,14 +50,16 @@ module clamp(
 			]) {
 				cube([
 					thickness*2+rod*2,
-					height,
+					rod*2+thickness,
 					width,
 				]);
-			}
-			cylinder(
-				r=rod+thickness,
-				h=width
-			);			
+				cube([
+					rod+thickness*1.25,
+					rod*4+thickness*2.5,
+					width,
+				]);
+
+			}		
 		}
 
 		//Rod1

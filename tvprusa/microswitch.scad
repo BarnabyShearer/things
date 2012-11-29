@@ -44,7 +44,7 @@ module mount(
 	switch = micro,
 	rod = m8,
 	bolt = m3,
-	thickness = 1.75,
+	thickness = 1.85,
 ) {
 	size = [
 		switch[0] + thickness*2,

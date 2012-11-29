@@ -391,7 +391,7 @@ module extruder(
 			);
 
 			cylinder(
-				r=bearing[1]-t/10,
+				r=bearing[1]-t,
 				h=size[2]+2
 			);
 		}
@@ -473,20 +473,22 @@ module extruder(
 		}
 
 		//spring guide
-		translate([
-			filament_x,
-			size[1]+bolt*2,
-			size[2] - bearing[2]/2 - t/8
-		]){
-			rotate([
-				0,
-				90,
-				0
-			]) {
-				cylinder(
-					r = bolt,
-					h = size[0]
-				);
+		for(x=[0:1]) {
+			translate([
+				filament_x,
+				size[1]+bolt*2,
+				size[2]/2 -( size[2]/2 - bearing[2]/2 - t/8 ) + ( size[2]/2 - bearing[2]/2 - t/8) *2*x
+			]){
+				rotate([
+					0,
+					90,
+					0
+				]) {
+					cylinder(
+						r = bolt,
+						h = size[0]
+					);
+				}
 			}
 		}
 
@@ -527,6 +529,30 @@ module extruder(
 			90
 		]) {
 			extruder_arm(
+				bearing = bearing,
+				bolt = bolt,
+				filament = filament,
+				clamp = clamp,
+				filament_x = filament_x,
+				bearing_y = bearing_y,
+				size = size,
+				t = t
+			);
+		}
+	}
+
+
+	translate([
+		0,
+		-26,
+		size[2]
+	]) {
+		rotate([
+			180,
+			0,
+			90
+		]) {
+			extruder_arm_support(
 				bearing = bearing,
 				bolt = bolt,
 				filament = filament,
@@ -735,11 +761,11 @@ module extruder_arm() {
 			translate([
 				filament_x-filament-bearing[1],
 				bearing_y+1,
-				bearing[2] + t
+				size[2]/2
 			]) {
 				cylinder(
 					r = bearing[0],
-					h = size[2] - (bearing[2] + t)
+					h = size[2]/2 - (bearing[2] + t)
 				);
 			}
 
@@ -772,11 +798,11 @@ module extruder_arm() {
 			translate([
 				filament_x-filament-bearing[1],
 				bolt*3 + 4 + size[1],
-				size[2] - bearing[2]
+				size[2]/2
 			]) {
 				cylinder(
 					r = bolt+t,
-					h = bearing[2]
+					h = size[2]/2
 				);
 			}
 
@@ -791,6 +817,30 @@ module extruder_arm() {
 					h = size[2]/2
 				);
 			}
+		}
+
+		//bearing holder bolt
+		translate([
+			filament_x-filament-bearing[1],
+			bearing_y+1,
+			bearing[2] + t-1
+		]) {
+			cylinder(
+				r=bolt,
+				h=100
+			);
+		}
+
+		//armend holder bolt
+		translate([
+			filament_x-filament-bearing[1],
+			bolt*3 + 4 + size[1],,
+			bearing[2] + t-1
+		]) {
+			cylinder(
+				r=bolt,
+				h=100
+			);
 		}
 
 		//pivot
@@ -809,12 +859,120 @@ module extruder_arm() {
 		translate([
 			filament_x - filament - bearing[1] - bolt - t -1,
 			size[1],
-			size[2] - bearing[2]/2 - bolt - t/8
+			size[2] - bearing[2]/2 - bolt/2 - t/84
 		]){
 			cube([
 				bolt*2 + t*2 + 2,
-				bolt*4,
-				bolt*2 + t/4
+				bolt*3,
+				bolt + t/4
+			]);
+		}
+
+	}
+}
+
+module extruder_arm_support() {
+
+	difference() {
+		union() {
+
+			//bearing
+			%translate([
+				filament_x-filament-bearing[1],
+				bearing_y+1,
+				bearing[2] + t
+			]) {
+				cylinder(
+					r = bearing[1],
+					h = bearing[2]
+				);
+			}
+
+			//bearing holder
+			translate([
+				filament_x-filament-bearing[1],
+				bearing_y+1,
+				size[2]/2
+			]) {
+				cylinder(
+					r = bearing[0],
+					h = size[2]/2 - (bearing[2] + t)
+				);
+			}
+
+			//bearing sholder
+			translate([
+				filament_x-filament-bearing[1],
+				bearing_y+1,
+				size[2] - bearing[2] - t
+			]) {
+				cylinder(
+					r = bearing[0] + t/5,
+					h = bearing[2] + t
+				);
+			}
+
+			//arm
+			translate([
+				filament_x - filament - bearing[1] - bolt - t,
+				bearing_y+1,
+				size[2] - bearing[2]
+			]) {
+				cube([
+					bolt*2 + t*2,
+					size[1]-(bearing_y+1)+bolt*3 + 4,
+					bearing[2]
+				]);
+			}
+
+			//arm end
+			translate([
+				filament_x-filament-bearing[1],
+				bolt*3 + 4 + size[1],
+				size[2]/2
+			]) {
+				cylinder(
+					r = bolt+t,
+					h = size[2]/2
+				);
+			}
+		}
+
+		//bearing holder bolt
+		translate([
+			filament_x-filament-bearing[1],
+			bearing_y+1,
+			bearing[2] + t-1
+		]) {
+			cylinder(
+				r=bolt,
+				h=100
+			);
+		}
+
+		//armend holder bolt
+		translate([
+			filament_x-filament-bearing[1],
+			bolt*3 + 4 + size[1],,
+			bearing[2] + t-1
+		]) {
+			cylinder(
+				r=bolt,
+				h=100
+			);
+		}
+
+
+		//slot
+		translate([
+			filament_x - filament - bearing[1] - bolt - t -1,
+			size[1],
+			size[2] - bearing[2]/2 - bolt/2 - t/84
+		]){
+			cube([
+				bolt*2 + t*2 + 2,
+				bolt*3,
+				bolt + t/4
 			]);
 		}
 

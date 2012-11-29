@@ -42,7 +42,7 @@ translate(	[
 ]) {
 	mount1(
 		rod_gap=158,
-		pitch = 70
+		pitch = 70 //Change to 72 for OMC v2
 	);
 }
 
@@ -54,7 +54,7 @@ translate(	[
 ]) {
 	mount1(
 		rod_gap=158,
-		pitch = 70
+		pitch = 70 //Change to 72 for OMC v2
 	);
 }
 
