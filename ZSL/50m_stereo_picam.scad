@@ -71,14 +71,7 @@ module picam() {
 			0,
 			(d[1] - support_thickness)/2 + 7
 		]) {
-			center_ring(
-				e = e,
-				support_thickness = support_thickness,
-				d = d,
-				camera = camera,
-				pi = pi,
-				cross = cross
-			);
+			center_ring();
 		}
 		for(i=[0:1]) {
 			translate([
@@ -86,15 +79,7 @@ module picam() {
 				0,
 				camera[1][0] + (d[1] - potting[0] - camera[1][0] - camera[1][1])*i - support_thickness/2
 			]) {
-				camera_ring(
-					e = e,
-					support_thickness = support_thickness,
-					d = d,
-					camera = camera,
-					pi = pi,
-					cross = cross,
-					i = i
-				);	
+				camera_ring();	
 			}
 		}
 		for(i=[0:2]) {			
@@ -108,15 +93,7 @@ module picam() {
 					-90,
 					0
 				]) {
-					strut(
-						e = e,
-						support_thickness = support_thickness,
-						d = d,
-						camera = camera,
-						pi = pi,
-						cross = cross,
-						i = i
-					);
+					strut();
 				}
 			}
 		}
