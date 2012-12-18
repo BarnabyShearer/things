@@ -15,7 +15,11 @@
 include <50m_stereo_picam_configuration.scad>
 use <50m_stereo_picam_supports.scad>
 
-picam_sheet1();
+projection(
+	cut = true
+) {
+	picam_sheet1();
+}
 
 module picam_sheet1(
 	laser = .2
