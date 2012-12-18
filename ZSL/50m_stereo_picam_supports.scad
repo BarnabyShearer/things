@@ -11,71 +11,40 @@
  *
  * License CC BY 3.0
  */
-$fn=60;
+
+include <50m_stereo_picam_configuration.scad>;
 
 picam_supports();
 
-module picam_supports(
-	e = 0.1,
-	support_thickness = 3,
-	d = [
-		100/2,                  // Inner radius
-		250 - 20 - 20,      // Inner length
-		[25, 55/2],           // Potting clearence
-	],
-	camera = [
-		26.5/2,    // Radius
-		[25, 20],   // Distances from end
-	],
-	pi = [
-		[28, -17, 143], // Position
-		[0, 97, 90],         // Orientation
-	],
-	cross = [
-		6,
-		37.5
-	]
-) {
+module picam_supports() {
 
 	//Support 
-	center_ring(
-		e = e,
-		support_thickness = support_thickness,
-		d = d,
-		camera = camera,
-		pi = pi,
-		cross = cross
-	);
+	translate([
+		-d[0]*1.45,
+		0,
+		0
+	]) {
+		center_ring();
+	}
 
 	for(i=[0:1]) {
 		translate([
-			(d[0]*2+10)*(i+1),
+			(d[0]*2)*(i + 1) - 68,
 			0,
 			0
 		]) {
 			camera_ring(
-				e = e,
-				support_thickness = support_thickness,
-				d = d,
-				camera = camera,
-				pi = pi,
-				cross = cross,
 				i = i
 			);	
 		}
-
+	}
+	for(i=[0:2]) {
 		translate([
 			0,
-			d[0]*2*i+d[0]+10,
+			d[0]*.95*i + d[0] + 25,
 			0
 		]) {
 			strut(
-				e = e,
-				support_thickness = support_thickness,
-				d = d,
-				camera = camera,
-				pi = pi,
-				cross = cross,
 				i = i
 			);	
 
@@ -84,85 +53,64 @@ module picam_supports(
 }
 
 module center_ring(
-	e,
-	support_thickness,
-	d,
-	camera,
-	pi,
-	cross,
+	laser = 0,
 ) {
 	difference() {
 		cylinder(
-			r = d[0],
+			r = d[0] + laser,
 			h = support_thickness
 		);
 		translate([
-			-pi[0][0]-.5,
-			-23,
+			-17,
+			-59/2,
 			- 1
 		]) {
 			cube([
+				36,
 				59,
-				33,
 				support_thickness + 2
 			]);
 		}
-		for(i=[0:1]) {
+		for(i=[0:2]) {
 			translate([
-				support_thickness+cross[0] - i*cross[1]-support_thickness,
-				-camera[0] - support_thickness*3 - 11*(1-i),
+				cross[i] + laser,
+				-camera[0] - support_thickness*2.5 +laser,
 				-1
 			]) {
 				cube([
-					support_thickness + e,
-					camera[0]*2 + support_thickness*6 + 11*(1-i),
+					support_thickness + e - laser*2,
+					camera[0]*2 + support_thickness*5 - laser*2,
 					support_thickness + 2
 				]);
 			}
-		}
-
-		//Cable hole
-		translate([
-			-10,
-			26,
-			-1,
-		]) {
-			cylinder(
-				r = 10,
-				h = support_thickness + 2
-			);
 		}
 	}
 }
 
 module camera_ring(
-	e,
-	support_thickness,
-	d,
-	camera,
-	pi,
-	cross,
 	i = 0,
+	laser = 0,
 ) {
 	difference() {
 		cylinder(
-			r = d[0],
+			r = d[0] + laser,
 			h = support_thickness
 		);
+
 		// Eyehole
 		translate([
 			-51,
-			-camera[0],
-			-camera[0] + support_thickness/2
+			-camera[0] + laser,
+			-camera[0] + support_thickness/2 + laser
 		]) {
 			cube([
 				60,
-				camera[0]*2,
-				camera[0]*2
+				camera[0]*2 - laser*2,
+				camera[0]*2 - laser*2
 			]);
 		}
 		translate([
-				-0,
+			-0,
 			-camera[0]/2,
 			-camera[0]/2 + support_thickness/2
 		]) {
@@ -172,185 +120,148 @@ module camera_ring(
 				camera[0]
 			]);
 		}
-		if (i==0) {
-			// USB
+		for(i=[0:2]) {
 			translate([
-				-13,
-				-33,
+				cross[i] + laser,
+				-camera[0] - support_thickness*2 + laser,
 				-1
 			]) {
 				cube([
-					20,
-					33,
+					support_thickness - laser*2,
+					camera[0]*2 + support_thickness*4 - laser*2,
 					support_thickness + 2
 				]);
 			}
 		}
-		for(i=[0:1]) {
-			translate([
-				support_thickness+cross[0] - i*cross[1]-support_thickness,
-				-camera[0] - support_thickness*2,
-				-1
-			]) {
-				cube([
-					support_thickness,
-					camera[0]*2 + support_thickness*4,
-					support_thickness + 2
-				]);
-			}
-		}
-		//Cable hole
+
+		//Mic Hole
 		translate([
-			-10,
-			26,
+			-37,
+			-27.1/2 -4,
 			-1,
 		]) {
-			cylinder(
-				r = 10,
-				h = support_thickness + 2
-			);
+			cube([
+				20,
+				5,
+				support_thickness + 2
+			]);
+		}
+
+		//Mount Hole
+		translate([
+			-23,
+			0,
+			-1,
+		]) {
+			cube([
+				25,
+				30,
+				support_thickness + 2
+			]);
+		}
+
+		//Cable Hole
+		if(i==1) {
+			translate([
+				-5,
+				-27,
+				-1,
+			]) {
+				cylinder(
+					r = 20/2,
+					h = support_thickness + 2
+				);
+			}
 		}
 	}
 }
 
 module strut(
-	e,
-	support_thickness,
-	d,
-	camera,
-	pi,
-	cross,
 	i = 0,
+	laser = 0,
 ) {
-	translate([
-		camera[1][0],
-		sqrt( d[0]*d[0] - (cross[0]+support_thickness - i*(cross[1]+support_thickness)) * (cross[0]+support_thickness - i*(cross[1]+support_thickness))),
-		0
-	]) {
-		difference() {
-			union() {
+	difference() {
+		union() {
+			if(i!=1) {
 				translate([
-					support_thickness/2,
-					-camera[0] - support_thickness*3 - 11*(1-i),
+					support_thickness/2 - laser,
+					-camera[0] - support_thickness*2.5 - laser,
 					0,
 				]) {
 					cube([
-						(d[1] - d[2][0] - camera[1][0]-camera[1][1])-support_thickness,
-						camera[0]*2 + support_thickness*6 + 11*(1-i),
+						(d[1] - potting[0] - camera[1][0] - camera[1][1]) - support_thickness + laser*2,
+						camera[0]*2 + support_thickness*5 + laser*2,
 						support_thickness
 					]);
 				}
 				translate([
-					support_thickness/2,
-					-camera[0] - support_thickness*4 - 11*(1-i),
+					support_thickness/2 - laser,
+					-camera[0] - support_thickness*3 - laser,
 					0,
 				]) {
 					cube([
-						(d[1]  - camera[1][0]-camera[1][1])/2-support_thickness,
-						camera[0]*2 + support_thickness*8 + 11*(1-i),
+						(d[1]  - camera[1][0] - camera[1][1])/2 - support_thickness+7 + laser*2,
+						camera[0]*2 + support_thickness*6 + laser*2,
 						support_thickness
 					]);
-				}
-				// Eye Holders
-				for(i=[0:1]) {
-					translate([
-						(d[1] - d[2][0] - camera[1][0]-camera[1][1])*i ,
-						0,
-						0
-					]) {
-						cylinder(
-							r= camera[0] + support_thickness*2,
-							h = support_thickness
-						);
-					}
 				}
 			}
-			// Eye Holes
+			
+			// Eye Holders
 			for(i=[0:1]) {
 				translate([
-					(d[1] - d[2][0] - camera[1][0]-camera[1][1])*i ,
+					(d[1] - potting[0] - camera[1][0] - camera[1][1])*i ,
 					0,
-					-1
+					0
 				]) {
 					cylinder(
-						r= camera[0] + e,
-						h = support_thickness + 2
+						r= camera[0] + support_thickness*2 +laser,
+						h = support_thickness
 					);
 				}
 			}
-	
-			if(i==0) {
-				//Pi Hole
-				translate([
-					pi[0][2]-camera[1][0],
-					pi[0][1],
-					-1
-				]) {
-					rotate([
-						0,
-						0,
-						pi[1][1],
-					]) {
-						translate([
-							-3.1,
-							0,
-							0,
-						]) {
-							cube([
-								35,
-								88,
-								support_thickness+2,
-							]);
-						}
-						translate([
-							-3.1,
-							-18,
-							0,
-						]) {
-							cube([
-								3.2,
-								50,
-								support_thickness  + 2
-							]);
-						}
-					}
-				}
+		}
+
+		//USB Easing
+		if(i==1) {
+			translate([
+				support_thickness/2 + camera[0]+support_thickness*2,
+				-camera[0] - support_thickness*2.5 - laser,
+				-1,
+			]) {
+				cube([
+					(d[1] - potting[0] - camera[1][0] - camera[1][1]) - support_thickness + laser*2 - camera[0]*2 - support_thickness,
+					camera[0]*2 + support_thickness*5 + laser*2,
+					support_thickness + 2
+				]);
+			}			
+		}
+
+		// Eye Holes
+		for(i=[0:1]) {
+			translate([
+				(d[1] - potting[0] - camera[1][0] - camera[1][1])*i ,
+				0,
+				-1
+			]) {
+				cylinder(
+					r= camera[0] - laser,
+					h = support_thickness + 2
+				);
 			}
-			if(i==1) {
-				translate([
-					pi[0][2]-camera[1][0],
-					pi[0][1],
-					-1
-				]) {
-					rotate([
-						0,
-						0,
-						pi[1][1],
-					]) {
-						//Audio
-						translate([
-							8.1,
-							65,
-							0,
-						]) {
-							cylinder(
-								r= 3.5+e,
-								h = support_thickness  + 2
-							);
-						}
-						//Video
-						translate([
-							9.75,
-							45.6,
-							0
-						]) {
-							cylinder(
-								r= 4.15+e,
-								h = support_thickness  + 2
-							);
-						}
-					}
-				}
+		}
+
+		//Third Eye
+		if(i==2) {
+			translate([
+				79,
+				0,
+				-1
+			]) {
+				cylinder(
+					r=20/2,
+					h=support_thickness + 2
+				);
 			}
 		}
 	}

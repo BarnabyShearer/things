@@ -5,6 +5,7 @@
  *
  * License CC BY 3.0
  */
+$fn=60;
 
 camera();
 
@@ -49,7 +50,7 @@ module camera() {
 		color([0,0,0]) {
 			cylinder(
 				r = 5/2,
-				h = 30
+				h = 15
 			);
 		}
 	}
@@ -77,7 +78,7 @@ module camera() {
     //Mic
     color([.75,.75,.75]) {
         translate([
-            -26.5/2-3,
+            -26.5/2 - 2,
             -2.5,
             14+15
         ]) {
@@ -89,7 +90,7 @@ module camera() {
                 cube([
                     15,
                     5,
-                    4
+                    3
                 ]);
             }
         }

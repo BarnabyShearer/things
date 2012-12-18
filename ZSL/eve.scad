@@ -5,8 +5,6 @@
  *
  * License CC BY 3.0
  */
-
-
 $fn=60;
 
 eve();
