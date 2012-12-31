@@ -12,7 +12,7 @@
  * License CC BY 3.0
  */
 
-$fa=3;
+$fa=1;
 $fs=.5;
 
 e = 0.1;

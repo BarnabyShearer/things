@@ -155,7 +155,7 @@ module camera_ring(
 		]) {
 			cube([
 				25,
-				30,
+				25,
 				support_thickness + 2
 			]);
 		}
