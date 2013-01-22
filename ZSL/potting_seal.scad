@@ -14,7 +14,7 @@ module seal(
 	h = 30,
 	hole = [14.7, 19.5],
 	tab = [3/2, 10],
-	t = 1
+	t = .52*2
 ) {
 
 	difference() {
@@ -31,40 +31,26 @@ module seal(
 				]) {
 					translate([
 						-tab[1]/2,
-						0,
-						h-t*2
+						r,
+						h-tab[1]
 					]) {
-						cube([
-							tab[1],
-							r+tab[1],
-							t*2
-						]);
+						rotate([
+							45,
+							0,
+							0
+						]) {
+							cube([
+								tab[1],
+								tab[1]*2,
+								tab[1]
+							]);
+						}
 					}
-					//Support
-					translate([
-						0,
-						r + tab[1]/2,
-						0
-					]) {
-						cylinder(
-							r = tab[0]+.1,
-							h = h
-						);
-					}
-					translate([
-						-tab[1]/2,
-						0,
-						0
-					]) {
-						cube([
-							tab[1],
-							r+tab[1],
-							h
-						]);
-					}
+					
 				}
 			}
 		}
+		//support hollow
 		for(x=[0:2]) {
 			rotate([
 				0,
@@ -81,22 +67,44 @@ module seal(
 						h = h + t*2
 					);
 				}
+				translate([
+					-tab[1]/2 +t,
+					r+t,
+					h - t*2 -tab[1]
+				]) {
+					cube([
+						tab[1] - t*2,
+						tab[1],
+						tab[1]
+					]);
+				}
 			}
+
 		}
 		translate([
 			0,
 			0,
-			t
+			t*2
 		]) {
 			cylinder(
 				r=r,
 				h=h+1
 			);
 		}
+		translate([
+			0,
+			0,
+			h
+		]) {
+			cylinder(
+				r=100,
+				h=100
+			);
+		}
 		cube(center = true, [
 			hole[0],
 			hole[1],
-			2 + t
+			2 + t*3
 		]);
 		for(x=[0:1]) {
 			translate([
@@ -106,7 +114,7 @@ module seal(
 			]) {
 				cylinder(
 					r=r/5,
-					h= 2+t
+					h= 2+t*2
 				);
 			}
 		}
