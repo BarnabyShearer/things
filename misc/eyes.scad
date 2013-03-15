@@ -1,5 +1,9 @@
 /*
  * Eyes
+ *
+ * This connects a Galaxy Nexus and the lenses from a stereoscopic 35mm slide viewer.
+ * https://play.google.com/store/apps/details?id=com.uscict.fov2go_minus_lab
+ * 
  * Copyright 2013 <b@Zi.iS>
  * License CC BY 3.0
  */

@@ -1,5 +1,8 @@
 /*
  * XRF Relay Base Box
+ *
+ * http://shop.ciseco.co.uk/xrf-relaybase-also-for-xbee-wireless-dual-relay-module-for-switching-kit/
+ *
  * Copyright 2013 <b@Zi.iS>
  * License CC BY 3.0
  */
