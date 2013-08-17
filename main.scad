@@ -1,8 +1,6 @@
 /*
  * Selective Laser Sintering
  *
- * Inspired by http://www.thingiverse.com/thing:25624
- *
  * Copyright 2013 <b@Zi.iS>
  * License CC BY 3.0
  */
