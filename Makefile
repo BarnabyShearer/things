@@ -25,12 +25,9 @@ part%a.dxf: .pos
 	#HACK: Sub-shell openscad to fix broken pipe message
 	$(shell openscad -D preview=0 -m make -o "$@" -d "$@.deps" "$<" 2> .log)
 
-%.y4m: *.png
-	for f in *.png *.png *.png; do \
+%.webm: *.png
+	for f in *.png; do \
 		convert -resize x720 -gravity center -crop 1280x720+0+0 +repage $$f ppm:-;\
-	done | ppmtoy4m -F 25:1 > $@
-
-%.webm: %.y4m
-	vpxenc $+ -o $@ -p 2
+	done | ffmpeg -r 30 -f image2pipe -c:v ppm -i pipe: -c:v libvpx -b:v 10M -crf 20 "$@"
 
 include $(wildcard *.deps)
