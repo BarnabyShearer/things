@@ -3,7 +3,7 @@
 # Copyright 2013 <b@Zi.iS>
 # License GPLv2
 
-PLATE=6mm MDF
+PLATE=6mm STEEL
 
 SRC=$(wildcard *.scad)
 DEST=$(SRC:.scad=.stl)
