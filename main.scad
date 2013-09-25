@@ -1,4 +1,4 @@
-/*
+	/*
  * Selective Laser Sintering
  *
  * Copyright 2013 <b@Zi.iS>, <richard.ibbotson@btinternet.com>
@@ -51,7 +51,7 @@ module sls(
 		7.8		//material[0]
 	],
 	motor_depth = 150,
-	bed_height = 150,
+	bed_height = 100,
 	material = [
 		6,
 		"STEEL",
@@ -84,7 +84,7 @@ module sls(
 		0,
 		-width/2 + width*$t,
 		roller/2
-	]) {
+	] * preview) {
 		roller(
 			r = roller/2,
 			h = size[1],
@@ -111,12 +111,12 @@ module sls(
 				- guide_pitch * i,
 			length/2,
 			roller/2
-		]) {
+		] * preview) {
 			rotate([
 				90,
 				0,
 				0
-			]) {
+			] * preview) {
 				rod(
 					r=rod/2,
 					h = length,
@@ -139,12 +139,12 @@ module sls(
 			(length)/2
 			 - (length -material[0])*i,
 			roller/2
-		]) {
+		] * preview) {
 			rotate([
 				90,
 				0,
 				0
-			]) {
+			] * preview) {
 				2d(
 					[
 						guide_pitch
@@ -154,6 +154,22 @@ module sls(
 					material = material,
 					id = 8 + i
 				) {
+					translate([
+							size[0]/2
+							+ material[0]*3
+							+ (chain[1] + roller_gear[4])/2
+							+ roller_gear[3]
+							+ bolt/2
+							+ rod*1.5
+							- guide_pitch/2,
+							0,
+							0
+					]) {
+						kerf_cylinder(
+							r = bolt/2,
+							h = material[0]
+						);
+					}
 					for(y=[0:1]) {
 						translate([
 							-guide_pitch/2+ guide_pitch*y,
@@ -171,11 +187,50 @@ module sls(
 		}
 	}
 
+	//Support rods 
+	for(i=[0:1]) {
+		translate([
+			size[0]/2 + material[0],
+			-(gear_pitch-gear_r*6)/2 + (gear_pitch-gear_r*6)*i,
+			roller/2 + roller_r + gear_r
+		]) {
+			rotate([
+				0,
+				90,
+				0
+			]) {
+				rod(
+					r = rod/2,
+					h = motor_depth,
+					id = -1
+				);
+			}
+		}
+		translate([
+			size[0]/2 + material[0],
+			-(length-rod*3)/2 + (length-rod*3)*i,
+			-bed_height+rod*1.5
+		]) {
+			rotate([
+				0,
+				90,
+				0
+			]) {
+				rod(
+					r = rod/2,
+					h = motor_depth,
+					id = -1
+				);
+			}
+		}
+	}
+
+	//Chain
 	translate([
 		size[0]/2 + material[0]*2.5,
 		0,
 		roller/2
-	]) {
+	] * preview) {
 		dual_chain(
 			gear_pitch = gear_pitch,
 			chain = chain,
@@ -191,13 +246,13 @@ module sls(
 		);
 	}
 
-
+	//Feed
 	for(i=[-1:1]) {
 		translate([
 			0,
 			i*(size[1] + material[0]*2),
 			0,
-		]) {
+		] * preview) {
 			feed(
 				size = size,
 				rod = rod,
@@ -207,6 +262,7 @@ module sls(
 				motor_depth = motor_depth,
 				bed_height = bed_height,
 				pos = i== 0 ? size[2]*$t : size[2]-size[2]*$t,
+				bolt = bolt,
 				id = 22+16+16*i
 			);
 		}
@@ -214,32 +270,44 @@ module sls(
 
 	//Feed Supports
 	translate([
-		(size[0]/2 + material[0]*2)/2 -  (rod + bearing60_offset(rod))/2/2,
 		0,
-		-feed_length(size, material, rod) - bearing60_width(rod)
-	]) {
+		0,
+		-feed_length(size, material, rod)
+	] * preview) {
 		translate([
-			(size[0]/2 + material[0]*2)/2 -  (rod + bearing60_offset(rod))/2 + material[0]*2,
+			size[1]/2+material[0]*2,
 			0,
 			0
-		]) {
+		] * preview) {
 			rotate([
 				0,
 				90,
 				0
-			]) {
+			] * preview) {
 				2d(
 					[
-						60,
+						30,
 						width + material[0]*2 + bolt*6,
 					],
 					material = material,
 					id = 70
 				) union() {
+					for(x=[-2.8,-1,1,2.8]) {
+						translate([
+							material[0],
+							(size[1]/2 + material[0]) * x,
+							0
+						]) {
+							kerf_cylinder(
+								r = bolt/2,
+								h = material[0]
+							);
+						}
+					}
 					for(x=[0:1]) {
 						for(y=[0:1]) {
 							translate([
-								-25 + 50*y,
+								-10 + 20*y,
 								-(width + material[0]*2 + (bolt*3))/2 + (width + material[0]*2 + bolt*3)*x,
 								0
 							]) {
@@ -252,7 +320,7 @@ module sls(
 					}
 					for(i=[-1:1]) {
 						translate([
-							-6,
+							0,
 							i*(size[1] + material[0]*2),
 							0
 						]) {
@@ -265,9 +333,14 @@ module sls(
 				}
 			}
 		}
+		translate([
+			0,
+			0,
+			-material[0]*1.5
+		])
 		2d(
 			[
-				size[0]/2 + material[0]*2 + (rod + bearing60_offset(rod))/2,
+				size[0] + material[0]*2,
 				width,
 			],
 			material = material,
@@ -275,46 +348,26 @@ module sls(
 		) {
 			for(i=[-1:1]) {
 				translate([
-					-((size[0]/2 + material[0]*2)/2 -  (rod + bearing60_offset(rod))/2/2),
-					i*(size[1] + material[0]*2),
+					15,
+					-10+i*(size[1] + material[0]*2),
 					0
 				]) {
-					translate([
-						15,
-						-10,
-						0
-					]) {
-						kerf_cube([
-							30,
-							20,
-							material[0]
-						]);
-					}
-					kerf_cylinder(
-						r = (rod + bearing60_offset(rod))/2-1,
-						h = material[0]/2
-					);
-					translate([
-						0,
-						0,
-						material[0]/2
-					]) {
-						kerf_cylinder(
-							r = (bearing60_offset(rod) + rod)/2,
-							h = material[0]/2
-						);
-					}
-					translate([
-						-(size[0] + material[0]*2)/2-.1,
-						-ease(rod)/2,
-						0
-					]) {
-						kerf_cube([
-							(size[0] + material[0]*2)/2 + .1,
-							ease(rod),
-							material[0]
-						]);
-					}
+					kerf_cube([
+						30,
+						20,
+						material[0]
+					]);
+				}		
+				translate([
+					-(size[0] + material[0]*2)/2-.1,
+					-ease(rod)/2+i*(size[1] + material[0]*2),
+					0
+				]) {
+					kerf_cube([
+						(size[0] + material[0]*2)/2 + .1,
+						ease(rod),
+						material[0]
+					]);
 				}
 			}
 		}
@@ -325,22 +378,22 @@ module sls(
 		0,
 		90,
 		0
-	]) {
+	] * preview) {
 		translate([
-			bed_height/2 - (roller/2  + roller_gear[0] + chain_gear[0] + nema_faceplate(motor[0])[0]/2)/2,
+			bed_height/2 - (roller/2  + roller_gear[0] + chain_gear[0]*2 )/2,
 			0,
 			size[1]/2 + material[0]
-		]) {
+		] * preview) {
 			2d(
 				[
-					bed_height + roller/2 + roller_gear[0] + chain_gear[0] + nema_faceplate(motor[0])[0]/2,
-					gear_pitch + nema_faceplate(motor[0])[1]
+					bed_height + roller/2 + roller_gear[0] + chain_gear[0]*2,
+					length
 				],
                 material = material,
 				id = 72
 			) union() {
 				translate([
-					-bed_height/2 + (roller/2  + roller_gear[0] + chain_gear[0] + nema_faceplate(motor[0])[0]/2)/2 - roller + rod +0.5,
+					-bed_height/2 + (roller/2  + roller_gear[0] + chain_gear[0]*2)/2 - roller + rod +0.5,
 					-(width + rod*2)/2,
 					0
 				]) {
@@ -356,8 +409,7 @@ module sls(
 							-bed_height/2
 								+ (roller/2
 									+ roller_gear[0]
-									+ chain_gear[0]
-									+ nema_faceplate(motor[0])[0]/2
+									+ chain_gear[0]*2
 								)/2
 								- roller/2
 								- roller_r
@@ -368,31 +420,32 @@ module sls(
 							0
 						]) {
 							kerf_cylinder(
-								r = rod/2,
+								r = (rod + bearing60_offset(rod))/2,
 								h = material[0]
 							);
 						}
 					}
 				}
+				
 				translate([
-					25,
+					-bed_height/2 + (roller/2  + roller_gear[0] + chain_gear[0]*2)/2 + feed_length(size, material, rod) - 30/2,
 					-(width + rod*2)/2,
 					0
 				]) {
 					kerf_cube([
-						40,
+						30,
 						width + material[0]*2,
 						material[0]
 					]);
 				}
 				for(i=[0:1]) {
 					translate([
-						10,
+						-bed_height/2 + (roller/2  + roller_gear[0] + chain_gear[0]*2)/2 + feed_length(size, material, rod) - 40/2,
 						-(width + material[0]*2 + bolt*4)/2 + (width + material[0]*2 + bolt*3)*i,
 						0
 					]) {
 						kerf_cube([
-							70,
+							40,
 							bolt,
 							material[0]
 						]);
@@ -404,13 +457,12 @@ module sls(
 								+ (
 									roller/2
 										+ roller_gear[0]
-										+ chain_gear[0]
-										+ nema_faceplate(motor[0])[0]/2
+										+ chain_gear[0]*2
 								)/2
 								- roller
 								+ rod/2,
-						(gear_pitch + nema_faceplate(motor[0])[1] )/2
-							 - (gear_pitch + nema_faceplate(motor[0])[1] -material[0])*i - material[0],
+						(length )/2
+							 - (length -material[0])*i - material[0],
 						0,
 						
 					]) {
@@ -421,7 +473,31 @@ module sls(
 						]);
 					}
 				}
-			};
+				for(i=[0:1]) {
+					translate([
+						-(roller/2  + roller_gear[0] + chain_gear[0]*2 )/2-(roller/2 + roller_r + gear_r),
+						-(gear_pitch-gear_r*6)/2 + (gear_pitch-gear_r*6)*i,
+						0,
+					]) {
+						rod(
+							r = rod/2,
+							h =  material[0],
+							id = -1
+						);
+					}
+					translate([
+						-(roller/2  + roller_gear[0] + chain_gear[0]*2 )/2-(-bed_height+rod*1.5),
+						-(length-rod*3)/2 + (length-rod*3)*i,
+						0,
+					]) {
+						rod(
+							r = rod/2,
+							h = material[0],
+							id = -1
+						);	
+					}
+				}
+			}
 		}
 	}
 }
@@ -442,6 +518,7 @@ module feed(
 	motor_depth,
 	bed_height,
 	pos,
+	bolt,
 	id
 ) {
 	length = feed_length(size, material, rod);
@@ -449,12 +526,12 @@ module feed(
 		0,
 		180,
 		0
-	]) {
+	] * preview) {
 		translate([
 			0,
 			0,
 			pos
-		]) {
+		] * preview) {
 			2d(
 				[
 					size[0],
@@ -475,43 +552,25 @@ module feed(
 			);
 		}
 
-
 		translate([
 			0,
 			0,
 			size[2] + material[0]
-		]) {
+		] * preview) {
 			2d(
 				[
 					size[0]+ material[0]*2,
 					size[1]+ material[0]*2,
 				],
 				material = material,
+				drill = [bolt, bolt, bolt, bolt], 
+               drill_offset = [[material[0], 0], [material[0],0], [-material[0],0], [-material[0],0]],
 				id = id + 2
 			) {
 				kerf_cylinder(
 					r = (bearing60_offset(rod) + rod)/2,
 					h = material[0]
 				);
-			}
-			translate([
-				0,
-				0,
-				+30
-			]) {
-				2d(
-					[
-						size[0]+ material[0]*2,
-						size[1]+ material[0]*2,
-					],
-					material = material,
-					id = id + 3
-				) {
-					kerf_cylinder(
-						r = (bearing60_offset(rod) + rod)/2,
-						h = material[0]
-					);
-				}
 			}
 			bearing60(
 				size = rod,
@@ -528,7 +587,7 @@ module feed(
 							0,
 							0,
 							3.5
-						]) {
+						] * preview) {
 							bearing60(
 								rod,
 								id = id + 7
@@ -549,12 +608,12 @@ module feed(
 									180,
 									0,
 									0
-								]) {
+								] * preview) {
 									translate([
 										0,
 										0,	
 										-motor[1]
-									]) {
+									] * preview) {
 										nema(
 											motor = motor,
 											id = id + 10
@@ -568,11 +627,35 @@ module feed(
 						0,
 						0,
 						16.5
-					]) {
+					] * preview) {
 						bearing60(
 							size = rod,
 							id = id + 11
 						);
+						2d(
+							[
+							size[0]+ material[0]*2,
+							size[1]+ material[0]*2,
+							],
+							material = material,
+							id = id + 3
+						) {
+							translate([
+								-45,
+								-10,
+								0
+							]) {
+								kerf_cube([
+									30,
+									20,
+									material[0]
+								]);
+							}	
+							kerf_cylinder(
+								r = (bearing60_offset(rod) + rod)/2,
+								h = material[0]
+							);
+						}
 					}
 				}
 			}
@@ -583,12 +666,12 @@ module feed(
 			-size[0]/2 - material[0]*(1-x) + size[0]*x,
 			0,
 			-size[2]/2 - material[0]/2
-		]) {
+		] * preview) {
 			rotate([
 				0,
 				90,
 				0
-			]) {
+			] * preview) {
 				2d(
 					[
 						size[2]+material[0],
@@ -603,18 +686,19 @@ module feed(
 			0,
 			-size[1]/2 + material[0]*x + size[1]*x,
 			-size[2]/2 - material[0]/2
-		]) {
+		] * preview) {
 			rotate([
 				90,
 				0,
 				0
-			]) {
+			] * preview) {
 				2d(
 					[
 						size[0]+material[0]*2,
 						size[2]+material[0],
 					],
 					material = material,
+					drill = [bolt, bolt, bolt, bolt], 
 					id = id + 14 + x
 				) e();
 			}
@@ -645,7 +729,7 @@ module simple_gear(
 		0,
 		0,
 		gear[3]
-	]) {
+	] * preview) {
 		if($children>0) for (i = [0 : $children-1]) child(i);
 	}
 }
@@ -667,22 +751,22 @@ module roller(
 		pos,
 		0,
 		0
-	])
+	] * preview)
 	rotate([
 		0,
 		90,
 		0
-	]) {
+	] * preview) {
 		translate([
 			0,
 			0,
 			-h/2 - rod*3 -1
-		]) {
+		] * preview) {
 			rotate([
 				0,
 				0,
 				-pos
-			]) {
+			] * preview) {
 				sliding_block(
 					rod = rod,
 					id = id
@@ -692,7 +776,7 @@ module roller(
 				0,
 				0,
 				2*rod
-			]) {
+			] * preview) {
 				rod(
 					r = rod/2,
 					h = h + gear_depth - roller_gear[4] + roller_gear[3] + rod*2 + 2,
@@ -702,7 +786,7 @@ module roller(
 					0,
 					0,
 					rod + 1
-				]) {
+				] * preview) {
 					part(id+2, str(r, "x", h, "mm roller")) {
 						translate([0,0,.1]) color([1,1,1]) difference() {
 							cylinder(r = r+.1, h = h);
@@ -721,7 +805,7 @@ module roller(
 						0,
 						0,
 						h + gear_depth - roller_gear[4]
-					]) {
+					] * preview) {
 		
 						simple_gear(
 							r = gear_r,
@@ -732,12 +816,12 @@ module roller(
 								0,
 								0,
 								1 + rod*3
-							]) {
+							] * preview) {
 								rotate([
 									180,
 									0,
 									-pos
-								]) {
+								] * preview) {
 									sliding_block(
 										rod = rod,
 										id = id+4
@@ -761,7 +845,7 @@ module sliding_block(
 			-rod,
 			-rod,
 			0
-		]) {
+		] * preview) {
 			cube([
 				rod*2,
 				rod*2,
@@ -772,7 +856,7 @@ module sliding_block(
 			0,
 			0,
 			rod*2
-		]) {
+		] * preview) {
 			e() cylinder(
 				r = rod/2,
 				h = rod
@@ -782,12 +866,12 @@ module sliding_block(
 			0,
 			-rod,
 			rod
-		]) {
+		] * preview) {
 			rotate([
 				-90,
 				0,
 				0
-			]) {
+			] * preview) {
 				e() cylinder(
 					r = rod/2,
 					h = rod*2
@@ -822,7 +906,7 @@ module dual_chain(
 		0,
 		90,
 		0
-	]) {	
+	] * preview) {	
 		for(z=[0:1]) {
 			part(id+z, str(chain_length, "mm of ", chain[0], "mm pitch chain")) {
 				for(i=[0:chain_links-1]) {
@@ -851,12 +935,12 @@ module dual_chain(
 					-gear_r -roller_r  + gear_r*2*z + roller_r*2*z,
 					-real_gear_pitch/2 + real_gear_pitch*x,
 					(chain[1] - chain_gear[4])/2
-				]) {
+				] * preview) {
 					rotate([
 						0,
 						0,
 						(360/(chain[0]*chain_gear[0]))*pos1*(1-z)+(360/(chain[0]*chain_gear[0]))*pos2*z
-					]) {
+					] * preview) {
 						simple_gear(
 							r = gear_r,
 							gear = chain_gear,
@@ -879,12 +963,12 @@ module dual_chain(
 									180,
 									0,
 									0
-								]) {
+								] * preview) {
 									translate([
 										0,
 										0,	
 										-motor[1]
-									]) {
+									] * preview) {
 										nema(
 											motor = motor,
 											id = id+10+x
