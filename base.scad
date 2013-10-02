@@ -11,7 +11,7 @@ base();
 
 module base(
 	width = 5,
-	crank_r = 16,
+	crank_r = 15,
 	piston_r = 6,
 	thickness = 2
 ) {

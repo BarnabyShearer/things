@@ -10,7 +10,7 @@ include <scadhelper/main.scad>;
 flywheel();
 
 module flywheel(
-	crank_r = 16,
+	crank_r = 15,
 	piston_r = 6,
 	thickness = 2
 ) {

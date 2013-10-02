@@ -15,7 +15,7 @@ module mount(
 	crank_r = 15,
 	valve_r = 2,
 	air_r = 4.5/2,
-	piston_h = 6,
+	piston_h = 3,
 	double = 1,
 	clearence = 2,
 	thickness = 2
