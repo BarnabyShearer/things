@@ -10,9 +10,12 @@ include <scadhelper/main.scad>;
 bevel_gears();
 
 module bevel_gears(
+	rotation = 360*$t,
 	id
 ) {
 	part(id, "Bevel gear set") {
+		translate([0,0,13])
+		rotate([180,0,rotation]) 
 		color(color_steel) difference() {
 			union() {
 				cylinder(
@@ -63,23 +66,29 @@ module bevel_gears(
 		rotate([
 			0,
 			90,
-			0
+			180
 		]) {
 			translate([
-				-12.7/2 - 13,
+				-12.7/2 + 13,
 				0,
 				-15 - 35/2 
 			]) {
-				color(color_steel) difference() {
-					cylinder(
-						r1 = 17/2,
-						r2 = 12.7/2,
-						h = 15
-					);
-					e() cylinder(
-						r = 6/2,
-						h = 15
-					);
+				rotate([
+					0,
+					0,
+				 	rotation * 2.75
+				]) {
+					color(color_steel) difference() {
+						cylinder(
+							r1 = 17/2,
+							r2 = 12.7/2,
+							h = 15
+						);
+						e() cylinder(
+							r = 6/2,
+							h = 15
+						);
+					}
 				}
 			}
 		}
@@ -87,10 +96,10 @@ module bevel_gears(
 	rotate([
 		0,
 		90,
-		0
+		180
 	] * preview) {
 		translate([
-			-12.7/2 - 13,
+			-12.7/2 + 13,
 			0,
 			-15 - 35/2 
 		] * preview) {
