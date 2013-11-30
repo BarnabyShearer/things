@@ -19,7 +19,7 @@ plate.dxf: $(addsuffix a.dxf, $(addprefix part,$(shell grep "${PLATE}" .log | cu
 	tail -n 11 $< >> $@
 
 part%a.dxf: .pos
-	openscad -D ZCUT=0 -D preview=0 -D XOFF=`grep part$*" " .pos | cut -d" " -f2` -D YOFF=`grep part$*" " .pos | cut -d" " -f3` -D PART=$* -o $@ main.scad
+	$(shell openscad -D ZCUT=0 -D preview=0 -D XOFF=`grep part$*" " .pos | cut -d" " -f2` -D YOFF=`grep part$*" " .pos | cut -d" " -f3` -D PART=$* -o $@ main.scad)
 
 %.stl: %.scad
 	#HACK: Sub-shell openscad to fix broken pipe message
