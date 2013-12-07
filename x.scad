@@ -42,18 +42,18 @@ module x(
 			);
 
 			//Z-Rod Bearings
-			//for(z=[0:1]) {
+			for(z=[0:1]) {
 				translate([
 					0,
 					0,
-					nozzel_height
+					nozzel_height + space(linear_bearing_length(rod) + rod, z)
 				]) {
 					linear_bearing(
 						size = rod,
-						id = 1 + x
+						id = 1 + x*2 + z
 					);
 				}
-			//}
+			}
 			
 			if(x==0) {
 				translate([
@@ -63,7 +63,7 @@ module x(
 				]) {
 					rotate([
 						-90,
-						0,
+						45,
 						0
 					]) {
 
@@ -74,7 +74,7 @@ module x(
 						) {
 
 							//Belt
-							rotate([180,0,0])
+							rotate([180,0,-45])
 							chain(
 								chain = belt,
 								gears = [
@@ -122,7 +122,7 @@ module x(
 			translate([
 				0,
 				0,
-				nozzel_height - rod*.8/2
+				nozzel_height - rod*.8/2 -16
 			]) {
 				color(color_brass) m_nut(
 					size = rod,
@@ -234,12 +234,28 @@ module x(
 		0,
 		nozzel_height
 	]) {
-		x_end_idle(
+		x_end(
 			rod = rod,
 			x_rod_pitch = x_rod_pitch,
 			z_rods_pitch = (z_rod_pitch - z_thread_pitch)/2,
 			bolt = bolt,
 			id = 20
+		);
+	}
+
+	translate([
+		-(z_rod_pitch+z_thread_pitch)/4,
+		0,
+		nozzel_height
+	]) {
+		rotate([0,180,0])
+		x_end(
+			rod = rod,
+			x_rod_pitch = x_rod_pitch,
+			z_rods_pitch = (z_rod_pitch - z_thread_pitch)/2,
+			bolt = bolt,
+			motor = motor,
+			id = 23
 		);
 	}
 }
@@ -256,11 +272,12 @@ module x_carriage(
 	}
 }
 
-module x_end_idle(
+module x_end(
 	rod,
 	x_rod_pitch,
 	z_rods_pitch,
 	bolt,
+	motor = 0,
 	id
 ) {
 	//X-Carriage
@@ -268,14 +285,14 @@ module x_end_idle(
 		difference() {
 			union() {
 				translate([
-					-z_rods_pitch/2 - rod,
+					-z_rods_pitch/2 - rod - bolt,
 					13 + 1,
-					-x_rod_pitch/2 - rod
+					-x_rod_pitch/2 - rod - bolt/2
 				]) {
 					cube([
-						z_rods_pitch + rod*2.5,
+						z_rods_pitch + rod*2.5 + bolt,
 						rod ,
-						x_rod_pitch + rod*2
+						x_rod_pitch + rod*2 + bolt
 					]);
 				}
 				//Ends
@@ -303,9 +320,9 @@ module x_end_idle(
 			for(x=[0:1]) {
 				for(y=[0:1]) {
 					translate([
-						space(z_rods_pitch - rod - bolt*2, x),
+						space(z_rods_pitch + rod + bolt*1.5, x),
 						0,
-						space(x_rod_pitch - rod - bolt*2, y),
+						space(x_rod_pitch + rod + bolt*1.5, y),
 					]) {
 						rotate([-90,0,0]) {
 							cylinder(
@@ -326,12 +343,12 @@ module x_end_idle(
 			}
 			//Belt gap
 			translate([
-				-z_rods_pitch/2 - rod -.1,
+				-z_rods_pitch/2 - rod -.1 -bolt,
 				13 + 1 - rod - .1,
 				-x_rod_pitch/2 + rod
 			]) {
 				cube([
-					z_rods_pitch + .2 + rod,
+					z_rods_pitch + .2 + rod + bolt,
 					rod/2 + rod,
 					x_rod_pitch - rod*2
 				]);
@@ -372,24 +389,29 @@ module x_end_idle(
 		difference() {
 			union() {
 				translate([
-					-z_rods_pitch/2 - rod,
+					-z_rods_pitch/2 - rod - bolt,
 					1,
-					-x_rod_pitch/2 - rod
+					-x_rod_pitch/2 - rod - bolt /2
 				]) {
 					cube([
-						z_rods_pitch + rod*2.5,
+						z_rods_pitch + rod*2.5 + bolt,
 						11,
-						x_rod_pitch + rod*2
+						x_rod_pitch + rod*2 + bolt
 					]);
+				}
+			}
+			rotate([-90,45,0]) {
+				if(motor) {
+					e() nema_faceplate_drill(motor, scale=2);
 				}
 			}
 			//bolts
 			for(x=[0:1]) {
 				for(y=[0:1]) {
 					translate([
-						space(z_rods_pitch - rod - bolt*2, x),
+						space(z_rods_pitch + rod + bolt*1.5, x),
 						0,
-						space(x_rod_pitch - rod - bolt*2, y),
+						space(x_rod_pitch + rod + bolt*1.5, y),
 					]) {
 						rotate([-90,0,0]) {
 							cylinder(
@@ -409,12 +431,12 @@ module x_end_idle(
 			}
 			//Belt gap
 			translate([
-				-z_rods_pitch/2 -rod -.1,
+				-z_rods_pitch/2 -rod - bolt -.1,
 				13 + 1 - rod - .1,
 				-x_rod_pitch/2 + rod
 			]) {
 				cube([
-					z_rods_pitch + .2 + rod,
+					z_rods_pitch + .2 + rod + bolt,
 					rod/2 + rod,
 					x_rod_pitch - rod*2
 				]);
@@ -445,21 +467,23 @@ module x_end_idle(
 				}
 			}
 			//liner bearing holder
-			translate([
-				z_rods_pitch/2,
-				0,
-				- linear_bearing_length(rod)/2
-			]) {
-				cylinder(
-					r = (rod + linear_bearing_offset(rod))/2 + .1,
-					h = linear_bearing_length(rod) + .1
-				);
+			for(z=[0:1]) {
+				translate([
+					z_rods_pitch/2,
+					0,
+					- linear_bearing_length(rod)/2 + space(linear_bearing_length(rod) + rod, z)
+				]) {
+					cylinder(
+						r = (rod + linear_bearing_offset(rod))/2 + .1,
+						h = linear_bearing_length(rod) + .1
+					);
+				}
 			}
 			//nut holder
 			translate([
 				-z_rods_pitch/2,
 				0,
-				- rod*.8/2
+				- rod*.8/2 - (motor ? -16 : 16)
 			]) {
 				m_nut(rod + 0.1, id=-1);
 			}
@@ -490,24 +514,29 @@ module x_end_idle(
 		difference() {
 			union() {
 				translate([
-					-z_rods_pitch/2 - rod,
+					-z_rods_pitch/2 - rod - bolt,
 					-rod,
-					-x_rod_pitch/2 - rod
+					-x_rod_pitch/2 - rod -bolt/2
 				]) {
 					cube([
-						z_rods_pitch + rod*2.5,
+						z_rods_pitch + rod*2.5 + bolt,
 						rod-1,
-						x_rod_pitch + rod*2
+						x_rod_pitch + rod*2 + bolt
 					]);
+				}
+			}
+			rotate([90,45,0]) {
+				if(motor) {
+					e() nema_faceplate_drill(motor);
 				}
 			}
 			//bolts
 			for(x=[0:1]) {
 				for(y=[0:1]) {
 					translate([
-						space(z_rods_pitch - rod - bolt*2, x),
+						space(z_rods_pitch + rod + bolt*1.5, x),
 						0,
-						space(x_rod_pitch - rod - bolt*2, y),
+						space(x_rod_pitch + rod + bolt*1.5, y),
 					]) {
 						rotate([90,0,0]) {
 							cylinder(
@@ -526,21 +555,23 @@ module x_end_idle(
 				);
 			}
 			//liner bearing holder
-			translate([
-				z_rods_pitch/2,
-				0,
-				- linear_bearing_length(rod)/2
-			]) {
-				cylinder(
-					r = (rod + linear_bearing_offset(rod))/2 + .1,
-					h = linear_bearing_length(rod) + .1
-				);
+			for(z=[0:1]) {
+				translate([
+					z_rods_pitch/2,
+					0,
+					- linear_bearing_length(rod)/2 + space(linear_bearing_length(rod) + rod, z)
+				]) {
+					cylinder(
+						r = (rod + linear_bearing_offset(rod))/2 + .1,
+						h = linear_bearing_length(rod) + .1
+					);
+				}
 			}
 			//nut holder
 			translate([
 				-z_rods_pitch/2,
 				0,
-				- rod*.8/2
+				- rod*.8/2 - (motor ? -16 : 16)
 			]) {
 				m_nut(rod + 0.1, id=-1);
 			}
