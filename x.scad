@@ -11,21 +11,26 @@ use <scadhelper/vitamins/linear_bearing.scad>
 use <scadhelper/vitamins/hardware.scad>
 use <scadhelper/vitamins/nema.scad>
 use <scadhelper/vitamins/chain.scad>
-use <e3.scad>
-use <e3_fan.scad>
+use <scadhelper/bend.scad>
+use <kraken.scad>
 
 x();
+
+//TODO: FAN
 
 module x(
 	rod = 8,
 	x_rod_pitch = 50,
 	z_rod_pitch = 418 - 8,
 	z_thread_pitch = 358 - 8,
-	nozzel_height = 48,
+	nozzel_height = 37,
 	motor = [17, 24, 5],
 	belt = [5, 5],
 	bolt = 3,
-	pulley = [13]
+	pulley = [13],
+	X = 0,
+	Z = 0,
+	id
 ) {
 	for(x=[0:1]) {
 		translate([
@@ -40,17 +45,43 @@ module x(
 				h = 250,
 				id = -1
 			);
+		}
+		translate([
+			space(z_thread_pitch,x),
+			0,
+			0
+		]) {
 
+			//Z-drive rod
+			%threaded_rod(
+				r = rod/2,
+				h = 250,
+				id = -1
+			);
+		}
+	}
+	translate([
+		0,
+		0,
+		Z
+	]) {
+
+	for(x=[0:1]) {
+		translate([
+			space(z_rod_pitch, x),
+			0,
+			0
+		]) {
 			//Z-Rod Bearings
 			for(z=[0:1]) {
 				translate([
 					0,
 					0,
-					nozzel_height + space(linear_bearing_length(rod) + rod, z)
+					nozzel_height + space(linear_bearing_length(rod) + rod, z) 
 				]) {
 					linear_bearing(
 						size = rod,
-						id = 1 + x*2 + z
+						id = id + x*2 + z
 					);
 				}
 			}
@@ -70,7 +101,7 @@ module x(
 						//Motor
 						nema(
 							motor = motor,
-							id = 5
+							id = id + 5
 						) {
 
 							//Belt
@@ -81,7 +112,7 @@ module x(
 									[0, 0, pulley[0], -1],
 									[(z_rod_pitch+z_thread_pitch)/2, 0, pulley[0], -1]
 								],
-								id = 6
+								id = id + 6
 							) {
 
 								//Pully
@@ -89,7 +120,7 @@ module x(
 									pulley[0],
 									[belt[0], belt[1]*3],
 									[0, 0,	motor[2]/2],
-									id = 7
+									id = id + 7
 								);
 
 								//Idler
@@ -97,7 +128,7 @@ module x(
 									pulley[0],
 									[belt[0], belt[1]*3],
 									[0,	0,	motor[2]/2],
-									id = 8
+									id = id + 8
 								);
 							}
 						}
@@ -110,13 +141,6 @@ module x(
 			0,
 			0
 		]) {
-
-			//Z-drive rod
-			%threaded_rod(
-				r = rod/2,
-				h = 250,
-				id = -1
-			);
 	
 			//Z-drive nut
 			translate([
@@ -126,7 +150,7 @@ module x(
 			]) {
 				color(color_brass) m_nut(
 					size = rod,
-					id = 9 + x
+					id = id + 9 + x
 				);
 			}
 		}
@@ -147,87 +171,20 @@ module x(
 				rod(
 					r = rod/2,
 					h = z_rod_pitch,
-					id = 11+z
+					id = id + 11 + z
 				);
 			}
 		}
 	}
 
-	//Hotend
-	translate([
-		0,
-		-10,
-		0
-	]) {
-		E3(id = 13);
-		E3_fan(id = 14);
-	}
-
-	//Bowden
-	translate([
-		0,
-		-10,
-		69
-	]) {
-		part(19, "Bowden") color([1,1,1,.5]) {
-			difference() {
-				cylinder(
-					r = 6/2,
-					h = 100
-				);
-				cylinder(
-					r = 3.2/2,
-					h = 100
-				);
-			}
-		}
-	}
-
-	//Bowden Nylock
-	translate([
-		0,
-		-10,
-		80
-	]) {
-		rotate([
-			180,
-			0,
-			0
-		]) {
-			m_nylock(
-				size = 6,
-				id = 15
-			);
-		}
-	}
-
-	//Y bearings
-	for(z=[0:1]) {
-		translate([
-			0,
-			13,
-			nozzel_height + space(x_rod_pitch, z)
-		]) {
-			rotate([
-				0,
-				90,
-				0
-			]) {
-				linear_bearing(
-					size = rod,
-					id = 16 + z
-				);
-			}
-		}
-	}
-
-	translate([
-		0,
-		-10,
-		5 + 12 + 2 + 50.1 - 9.3
-	]) {
-		x_carriage(id = 18);
-	}
+	x_carriage(
+		rod = rod,
+		nozzel_height = nozzel_height,
+		x_rod_pitch = x_rod_pitch,
+		X = X,
+		Z = Z,
+		id = id + 18
+	);
 
 	translate([
 		(z_rod_pitch+z_thread_pitch)/4,
@@ -239,7 +196,7 @@ module x(
 			x_rod_pitch = x_rod_pitch,
 			z_rods_pitch = (z_rod_pitch - z_thread_pitch)/2,
 			bolt = bolt,
-			id = 20
+			id = id + 20
 		);
 	}
 
@@ -255,20 +212,53 @@ module x(
 			z_rods_pitch = (z_rod_pitch - z_thread_pitch)/2,
 			bolt = bolt,
 			motor = motor,
-			id = 23
+			id = id + 23
 		);
+	}
 	}
 }
 
 module x_carriage(
+	rod,
+	nozzel_height,
+	x_rod_pitch,
+	X,
+	Z,
 	id
 ) {
-	//X-Carriage
-	part(id, "X-Carriage") color(color_plastic) {
-		cylinder(
-			r = 25/2,
-			h = 25
-		);
+	//Hotend
+	translate([
+		-110 + X,
+		-20,
+		0,
+	]) {
+		kraken(id) {
+			bend([0, 500, -Z], 1000) water_tube(1,id + 24);
+			bend([0, 500, -Z], 1000) water_tube(1, id + 25);
+			bend([-100-X, 0, 0], 400) bowden(1,id + 26);
+			bend([-100-X, 0, 0], 400) bowden(1,id + 27);
+			bend([300-X, 0, 0], 400) bowden(1,id + 28);
+			bend([300-X, 0, 0], 400) bowden(1,id + 29);
+		}
+	}
+	//Y bearings
+	for(z=[0:1]) {
+		translate([
+			-110 + X,
+			13,
+			nozzel_height + space(x_rod_pitch, z)
+		]) {
+			rotate([
+				0,
+				90,
+				0
+			]) {
+				linear_bearing(
+					size = rod,
+					id = id + 16 + z
+				);
+			}
+		}
 	}
 }
 

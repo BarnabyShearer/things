@@ -1,11 +1,13 @@
 /*
  * E3 Fan
  *
- * Copyright 2013 <b@Zi.iS>
+ * Copyright 2013 E3D-Online Limited, <b@Zi.iS>
  * License CC BY 3.0
  */
 
 include <scadhelper/main.scad>
+use <scadhelper/vitamins/fan.scad>
+
 use <e3.scad>
 
 %E3();
@@ -27,5 +29,25 @@ module E3_fan(id = 0) {
 			}
 		}
 	}
-
+	translate([
+		0,
+		-25,
+		35
+	]) {
+		rotate([
+			90,
+			0,
+			180
+		]) {
+			fan(
+				size = [
+					30,
+					8,
+					25,
+					3
+				],
+				id = id+1
+			);
+		}
+	}
 }

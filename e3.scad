@@ -1,7 +1,7 @@
 /*
  * E3
  *
- * Copyright 2013 <b@Zi.iS>
+ * Copyright 2013 E3D-Online Limited, <b@Zi.iS>
  * License CC BY 3.0
  */
 
@@ -10,6 +10,13 @@ include <scadhelper/main.scad>
 E3();
 
 module E3(id) {
+	E3_nozzle(id);
+	E3_block(id+1);
+	E3_break(id+2);
+	E3_sink(id+3);
+}
+
+module E3_nozzle(id) {
     part(id, "E3 Nozzle") color(color_brass) {
         difference() {
             union() {
@@ -59,7 +66,9 @@ module E3(id) {
 
         }
     }
-    part(id+1, "E3 Heat Block") color(color_steel) {
+}
+module E3_block(id) {
+    part(id, "E3 Heat Block") color(color_steel) {
         translate([
                 -8,
                 -4,
@@ -124,7 +133,9 @@ module E3(id) {
             }
         }
     }
-    part(id+2, "E3 Heat Break") color(color_steel) {
+}
+module E3_break(id) {
+    part(id, "E3 Heat Break") color(color_steel) {
         translate([
                 0,
                 0,
@@ -158,7 +169,9 @@ module E3(id) {
             }
         }
     }
-    part(id+3, "E3 Heat Sink") color(color_steel) {
+}
+module E3_sink(id) {
+    part(id, "E3 Heat Sink") color(color_steel) {
         translate([
                 0,
                 0,
