@@ -1,0 +1,6 @@
+*.dxf
+*.svg
+*.stl
+*.deps
+/.pos
+/.log
