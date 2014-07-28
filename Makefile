@@ -14,7 +14,7 @@ all: ${INPUT}.stl plate.dxf
 .pos: ${INPUT}.stl
 	sed -n "s/.*PART\([0-9]\+\):${PLATE} \([0-9.]\+\)x\([0-9.]\+\)mm.*/part\1 \2 \3/gp" .log | ./scadhelper/pack.py > "$@"
 
-plate.dxf: $(addsuffix a.dxf, $(addprefix part,$(shell grep "${PLATE}" .log | cut -c12- | cut -d: -f1)))
+plate.dxf: $(addsuffix a.dxf, $(addprefix part,$(shell grep "PART\([0-9]\+\):${PLATE} " .log | cut -c12- | cut -d: -f1)))
 	head -n 11 $< > $@
 	for f in $^; do tail -q -n +12 $$f | head -n -11 >> $@ ; done;
 	tail -n 11 $< >> $@
