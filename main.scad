@@ -68,6 +68,12 @@ translate([
 
         translate([13, -(plate[1]/2 +15 - 3.8 - 5) + 180, 0]) //Camera mount
             cube([5, 2, material[0]]);
+      
+        for(i=[-1,1])
+            translate([30*i, 75, 0])
+                rotate([0, 0, -55*i]) 
+                    translate([-material[0]/2, 0, 0])
+                        kerf_cube([material[0], 10, material[0]]);
 
     }
 }
@@ -245,11 +251,14 @@ module frame() {
                     35,
                     material[0]
                 ]);
-            translate([19/2, -plate[1]/2 + 5, 0])
+            translate([19/2, -plate[1]/2 + 5, 0]) //hinge mount
                 e() cylinder(d = 3, h = material[0]);
-            translate([0, -plate[1]/2 + 27.8, 0])
+            translate([0, -plate[1]/2 + 27.8, 0]) //servo mount
                 e() cube([12.5/2, 2.5, material[0]]);
+            translate([0, -81.9, 0]) //skid mount
+                kerf_cube([material[0]/2, 10, material[0]]);
         }
+
         translate([
             0,
             -plate[1]/2+35,
@@ -259,6 +268,11 @@ module frame() {
                     60-35,
                     material[0]
                 ]);
+            translate([30, 75, 0])
+                rotate([0, 90, -55]) 
+                    translate([-material[0], 0, -material[0]/2])
+                        kerf_cube([material[0], 10, material[0]]);
+ 
 
         difference() {
             translate([
@@ -270,6 +284,7 @@ module frame() {
                         110,
                         material[0]
                     ]);
+
             translate([0, -25, 0])
                 cube([15/2, 90, 6]); //ESC
 
@@ -282,8 +297,8 @@ module frame() {
         translate([
             0,
             plate[1]/2 - 27.3/2 - 13/2,
-            0]
-        )
+            0
+        ])
             cube([
                 plate[0]/2 - 27.3+4,
                 13,
@@ -293,8 +308,8 @@ module frame() {
         translate([
             plate[0]/2 - 27.3/2,
             plate[1]/2 - 27.3/2,
-            0]
-        )
+            0
+        ])
             difference() {
                 cylinder(
                     d = 27.3,
@@ -327,15 +342,6 @@ module frame() {
         ])
             mirror([0,1,0])
                 corner(5);
-
-        translate([0, -81.9, 0]) //skid mount
-            kerf_cube([material[0]/2, 10, material[0]]);
-
-        translate([30, 75, 0])
-            rotate([0, 90, -55]) 
-                translate([-material[0], 0, -material[0]/2])
-                    kerf_cube([material[0], 10, material[0]]);
-        
 }
 
 module skid(id) {
