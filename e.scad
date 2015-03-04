@@ -13,6 +13,9 @@ use <scadhelper/vitamins/bearing.scad>
 use <scadhelper/vitamins/rod.scad>
 use <scadhelper/vitamins/nema.scad>
 
+//todo: motor-D and grub
+
+
 use <e_gears.scad>
 
 e();
@@ -26,53 +29,86 @@ module e(
 		[1,1,1,.5]
 	],
 	drive_shaft = 8,
-	teeth = [9, 35],
-	pitch = 35,
+	teeth = [11, 45],
+	pitch = 40,
 	h = 10,
 	motor_shaft = 5,
 	bolt = 3
 ) {
 
 	//Bowden
+	translate([0,0,-50])
+	cylinder(
+		r = 1.75/2,
+		h = 100
+	);
 	translate([
 		0,
 		0,
-		-50
+		-14
 	]) {
-		part(19, "Bowden") color([1,1,1,.5]) {
+		color([1,1,.7]) {
 			difference() {
+				union() {
+					cylinder(
+						r = 8.2/2,
+						h = 8
+					);
+					translate([0,0,-6]) {
+						cylinder(
+							r = 11.3/2,
+							h = 6,
+							$fn = 6
+						);
+					}
+					translate([0,0,-6-6]) {
+						cylinder(
+							r = 9/2,
+							h = 6
+						);
+					}
+				}
 				cylinder(
-					r = 6/2,
-					h = 100
-				);
-				cylinder(
-					r = 3.2/2,
-					h = 100
+					r = 2.7/2,
+					h = 10
 				);
 			}
 		}
 	}
 
-	translate([
-		-bearing60_width(drive_shaft)/2,
-		drive_shaft + bearing60_offset(rod),
-		0
+	*translate([
+		-1.5,
+		rod/2+1,
+		-4
 	]) {
 		rotate([0,90,0]) {
-			bearing60(
-				drive_shaft,
+			bearing(
+				[3, 7, 3],
+				id = 11
+			);
+		}
+	}
+	*translate([
+		-1.5,
+		rod/2+1,
+		4
+	]) {
+		rotate([0,90,0]) {
+			bearing(
+				[3, 7, 3],
 				id = 11
 			);
 		}
 	}
 	
-	translate([material[0]/2,-pitch - drive_shaft/2,0])
+	
+	translate([material[0]/2 + 2.5,-pitch - drive_shaft/2,0])
 	rotate([0,90,0])
 	nema(
 		motor = motor,
 		id = 1
 	) {
-		translate([0,0,-24 + material[0] + 1.8]) {
+		translate([0,0,-24 + material[0] + 3]) {
 			e_gears(
 				teeth = teeth,
 				pitch = pitch,
@@ -84,28 +120,37 @@ module e(
 				part(3, "Hobbed bolt") {
 					rod(
 						r = drive_shaft/2,
-						h = 10 + 1.8 + material[0]*3 -bearing60_width(drive_shaft),
+						h = 27.5-1.5,
 						id = -1
-					) {
+					)
 						threaded_rod(
 							r = drive_shaft/2,
-							h = 40,
+							h = 3,
+							id = -1
+						)
+							rod(
+								r = drive_shaft/2,
+								h = 7,
+								id = -1
+							) {
+						threaded_rod(
+							r = drive_shaft/2,
+							h = 20,
 							id = -1
 						);
-						bearing60(
-							drive_shaft,
+						translate([0,0,-2])
+						bearing(
+							[8, 16, 5],
 							6
 						) {
-							m_washer(drive_shaft, 5) {
+							m_nut(
+								size = drive_shaft,
+								id = 6
+							) {
 								m_nut(
 									size = drive_shaft,
-									id = 6
-								) {
-									m_nut(
-										size = drive_shaft,
-										id = 7
-									);
-								}
+									id = 7
+								);
 							}
 						}
 					}
@@ -114,24 +159,24 @@ module e(
 						id = -1
 					);
 				}
-				translate([0,0,10]) {
-					m_washer(drive_shaft, 5) {
-						bearing60(
-							drive_shaft,
-							6
-						);
+				translate([0,0,h]) {
+					translate([0,0,3 + 3]) {
+								bearing(
+									[8, 16, 5],
+									8
+								);
 					}			
 				}
 			}
 		}
 	}
 
-	translate([material[0]/2,-pitch/2,0])
+	translate([material[0]/2 + 2.5,-25.5,0])
 	rotate([0,90,0])
 	2d(
 		[
-			60,
-			100
+			42.2,
+			42.2 + 19
 		],
 		material,
 		id = 2
@@ -143,31 +188,28 @@ module e(
 		}
 	}
 
-	translate([-material[0]/2,-pitch/2,0])
-	rotate([0,90,0])
+
+	translate([0,-4,8/2+2])
+	
 	2d(
 		[
-			60,
-			100
+			23,
+			16
 		],
 		material,
 		id = 2
 	) {
-		union() {
-		}
+	}
+	translate([0,-4,-6-8])
+	2d(
+		[
+			23,
+			16
+		],
+		material,
+		id = 2
+	) {
 	}
 
-	translate([-material[0]*3/2,-pitch/2,0])
-	rotate([0,90,0])
-	2d(
-		[
-			60,
-			100
-		],
-		material,
-		id = 2
-	) {
-		union() {
-		}
-	}
+
 }

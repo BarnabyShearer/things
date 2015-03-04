@@ -11,8 +11,6 @@ use <scadhelper/vitamins/linear_bearing.scad>
 use <scadhelper/vitamins/hardware.scad>
 use <scadhelper/vitamins/nema.scad>
 use <scadhelper/vitamins/chain.scad>
-use <scadhelper/bend.scad>
-use <kraken.scad>
 
 x();
 
@@ -23,7 +21,8 @@ module x(
 	x_rod_pitch = 50,
 	z_rod_pitch = 418 - 8,
 	z_thread_pitch = 358 - 8,
-	nozzel_height = 37,
+	y_rod_depth = 13,
+	nozzel_height = 50,
 	motor = [17, 24, 5],
 	belt = [5, 5],
 	bolt = 3,
@@ -160,7 +159,7 @@ module x(
 	for(z=[0:1]) {
 		translate([
 			-z_rod_pitch/2,
-			13,
+			y_rod_depth,
 			nozzel_height + space(x_rod_pitch, z)
 		]) {
 			rotate([
@@ -176,15 +175,6 @@ module x(
 			}
 		}
 	}
-
-	x_carriage(
-		rod = rod,
-		nozzel_height = nozzel_height,
-		x_rod_pitch = x_rod_pitch,
-		X = X,
-		Z = Z,
-		id = id + 18
-	);
 
 	translate([
 		(z_rod_pitch+z_thread_pitch)/4,
@@ -215,50 +205,6 @@ module x(
 			id = id + 23
 		);
 	}
-	}
-}
-
-module x_carriage(
-	rod,
-	nozzel_height,
-	x_rod_pitch,
-	X,
-	Z,
-	id
-) {
-	//Hotend
-	translate([
-		-110 + X,
-		-20,
-		0,
-	]) {
-		kraken(id) {
-			bend([0, 500, -Z], 1000) water_tube(1,id + 24);
-			bend([0, 500, -Z], 1000) water_tube(1, id + 25);
-			bend([-100-X, 0, 0], 400) bowden(1,id + 26);
-			bend([-100-X, 0, 0], 400) bowden(1,id + 27);
-			bend([300-X, 0, 0], 400) bowden(1,id + 28);
-			bend([300-X, 0, 0], 400) bowden(1,id + 29);
-		}
-	}
-	//Y bearings
-	for(z=[0:1]) {
-		translate([
-			-110 + X,
-			13,
-			nozzel_height + space(x_rod_pitch, z)
-		]) {
-			rotate([
-				0,
-				90,
-				0
-			]) {
-				linear_bearing(
-					size = rod,
-					id = id + 16 + z
-				);
-			}
-		}
 	}
 }
 
