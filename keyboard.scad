@@ -25,8 +25,8 @@ translate([60,30,10])
     rotate([45,0,0])
         import("Nexus5.stl");
 
-translate([-5,-80,0])
-    cube([278,100,10]);
+translate([-17,-80,0])
+    cube([297,100,10]);
 
 key("⎋", font="DejaVu Sans Mono") // `
 key("1") //F1
@@ -73,6 +73,7 @@ key("K")
 key("L")
 key(";")
 key("'")
+key("#") //bit lost but US don't even have it
 key("↵", font="DejaVu Sans Mono") //1.25 //KP_ENT
 ;
 
@@ -90,7 +91,6 @@ key(",")
 key(".")
 key("/")
 key("↑", font="DejaVu Sans Mono") //PgUp
-key("#") //bit lost but US don't even have it
 ;
 
 translate([0, -size * 4, 0])
@@ -104,6 +104,24 @@ key("←", font="DejaVu Sans Mono") //Home
 key("↓", font="DejaVu Sans Mono") //PgDn
 key("→", font="DejaVu Sans Mono") //End
 ;
+
+for(x=[0,1,2]) {
+    color([.5,.5*x,.5,.5]) {
+        translate([-16+95*x,0,5*x]) {
+            
+            translate([0,-1.5,0])
+                cube([94,size,20]);
+            translate([6,-1.5-size,0])
+                cube([94,size,20]);
+            translate([6,-1.5-2*size,0])
+                cube([94,size,20]);
+            translate([0,-1.5-3*size,0])
+                cube([94,size,20]);
+            translate([0,-1.5-4*size,0])
+                cube([94,size,20]);
+        }
+    }
+}
 
 module key(id, width=1, font="Droid Sans Mono Slashed:style=Bold") {
     
