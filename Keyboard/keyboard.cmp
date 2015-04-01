@@ -1,0 +1,367 @@
+Cmp-Mod V01 Created by Cvpcb (2014-10-11 BZR 5175)-product   date = Mon 30 Mar 2015 19:27:03 BST
+
+BeginCmp
+TimeStamp = /55182614;
+Reference = D1;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55189FEF;
+Reference = D2;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55189DD4;
+Reference = D3;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55198EA9;
+Reference = D4;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5519966B;
+Reference = D5;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55189840;
+Reference = D6;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518A5C9;
+Reference = D7;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518A5BC;
+Reference = D8;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55198EB5;
+Reference = D9;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55199677;
+Reference = D10;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C14B;
+Reference = D11;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C177;
+Reference = D12;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C16B;
+Reference = D13;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55198EC1;
+Reference = D14;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55199683;
+Reference = D15;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C160;
+Reference = D16;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C1A7;
+Reference = D17;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C19B;
+Reference = D18;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55198ECD;
+Reference = D19;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5519968F;
+Reference = D20;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518EF1F;
+Reference = D21;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518EF46;
+Reference = D22;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518EF3A;
+Reference = D23;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55198ED9;
+Reference = D24;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /5519969B;
+Reference = D25;
+ValeurCmp = DIODE;
+IdModule  = Diodes_SMD:Diode-SMA_Standard;
+EndCmp
+
+BeginCmp
+TimeStamp = /55196974;
+Reference = P1;
+ValeurCmp = CONN_01X05;
+IdModule  = Pin_Headers:Pin_Header_Angled_1x05;
+EndCmp
+
+BeginCmp
+TimeStamp = /55181C11;
+Reference = SW1;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55189FE8;
+Reference = SW2;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55182ADA;
+Reference = SW3;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55198EA3;
+Reference = SW4;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55199665;
+Reference = SW5;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518983A;
+Reference = SW6;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518A5C2;
+Reference = SW7;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518A5B5;
+Reference = SW8;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55198EAF;
+Reference = SW9;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55199671;
+Reference = SW10;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C145;
+Reference = SW11;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C171;
+Reference = SW12;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C151;
+Reference = SW13;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55198EBB;
+Reference = SW14;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5519967D;
+Reference = SW15;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C15A;
+Reference = SW16;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C1A1;
+Reference = SW17;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518C195;
+Reference = SW18;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55198EC7;
+Reference = SW19;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55199689;
+Reference = SW20;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518EF19;
+Reference = SW21;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518EF40;
+Reference = SW22;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /5518EF25;
+Reference = SW23;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55198ED3;
+Reference = SW24;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55199695;
+Reference = SW25;
+ValeurCmp = SW_PUSH_SMALL;
+IdModule  = Discret:SW_Matias_Quiet;
+EndCmp
+
+BeginCmp
+TimeStamp = /55185F4A;
+Reference = U1;
+ValeurCmp = ADP5589;
+IdModule  = DFN_QFN:QFN-24-1EP_3x3mm_Pitch0.4mm;
+EndCmp
+
+EndListe

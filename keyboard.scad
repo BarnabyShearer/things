@@ -94,12 +94,12 @@ key("↑", font="DejaVu Sans Mono") //PgUp
 ;
 
 translate([0, -size * 4, 0])
-key("⎈", 2, font="DejaVu Sans Mono")  //R CTRL
+key("⎈", 2.5, font="DejaVu Sans Mono")  //R CTRL
 key("\uE000", font="Linux Libertine Mono O:style=Bold") //R Tux
 key("⎇", font="DejaVu Sans") //Alt Gr
-key(" ", 1.75) //Fn Lock
-key(" ", 3)
-key("≣", 2.5, font="DejaVu Sans Mono")
+key(" ", 2) //Fn Lock
+key(" ", 2)
+key("≣", 3, font="DejaVu Sans Mono")
 key("←", font="DejaVu Sans Mono") //Home
 key("↓", font="DejaVu Sans Mono") //PgDn
 key("→", font="DejaVu Sans Mono") //End
