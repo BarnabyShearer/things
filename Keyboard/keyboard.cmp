@@ -1,4 +1,32 @@
-Cmp-Mod V01 Created by Cvpcb (2014-10-11 BZR 5175)-product   date = Mon 30 Mar 2015 19:27:03 BST
+Cmp-Mod V01 Created by Cvpcb (2014-10-11 BZR 5175)-product   date = Fri 10 Apr 2015 17:35:31 BST
+
+BeginCmp
+TimeStamp = /55283184;
+Reference = C1;
+ValeurCmp = C;
+IdModule  = Capacitors_SMD:C_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /55283223;
+Reference = C2;
+ValeurCmp = C;
+IdModule  = Capacitors_SMD:C_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /55284273;
+Reference = C3;
+ValeurCmp = C;
+IdModule  = Capacitors_SMD:C_0603;
+EndCmp
+
+BeginCmp
+TimeStamp = /55282F52;
+Reference = CON1;
+ValeurCmp = USB-MICRO-B;
+IdModule  = Connect:USB_Micro-B;
+EndCmp
 
 BeginCmp
 TimeStamp = /55182614;
@@ -176,10 +204,59 @@ IdModule  = Diodes_SMD:Diode-SMA_Standard;
 EndCmp
 
 BeginCmp
-TimeStamp = /55196974;
+TimeStamp = /5527F453;
 Reference = P1;
-ValeurCmp = CONN_01X05;
-IdModule  = Pin_Headers:Pin_Header_Angled_1x05;
+ValeurCmp = GND;
+IdModule  = local:Pin_Header_Straight_1x01;
+EndCmp
+
+BeginCmp
+TimeStamp = /552818F3;
+Reference = P2;
+ValeurCmp = GND;
+IdModule  = local:Pin_Header_Straight_1x01;
+EndCmp
+
+BeginCmp
+TimeStamp = /5527F401;
+Reference = P3;
+ValeurCmp = +3v3;
+IdModule  = local:Pin_Header_Straight_1x01;
+EndCmp
+
+BeginCmp
+TimeStamp = /552815EE;
+Reference = P4;
+ValeurCmp = +3v3;
+IdModule  = local:Pin_Header_Straight_1x01;
+EndCmp
+
+BeginCmp
+TimeStamp = /5527F0F1;
+Reference = P5;
+ValeurCmp = SDA;
+IdModule  = local:Pin_Header_Straight_1x01;
+EndCmp
+
+BeginCmp
+TimeStamp = /55281258;
+Reference = P6;
+ValeurCmp = SDA;
+IdModule  = local:Pin_Header_Straight_1x01;
+EndCmp
+
+BeginCmp
+TimeStamp = /5527F226;
+Reference = P7;
+ValeurCmp = SCL;
+IdModule  = local:Pin_Header_Straight_1x01;
+EndCmp
+
+BeginCmp
+TimeStamp = /55281345;
+Reference = P8;
+ValeurCmp = SCL;
+IdModule  = local:Pin_Header_Straight_1x01;
 EndCmp
 
 BeginCmp
@@ -362,6 +439,13 @@ TimeStamp = /55185F4A;
 Reference = U1;
 ValeurCmp = ADP5589;
 IdModule  = DFN_QFN:QFN-24-1EP_3x3mm_Pitch0.4mm;
+EndCmp
+
+BeginCmp
+TimeStamp = /55282D5D;
+Reference = U2;
+ValeurCmp = APE8865N-33-HF-3;
+IdModule  = Housings_SOT-23_SOT-143_TSOT-6:SOT-23;
 EndCmp
 
 EndListe

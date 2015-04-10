@@ -4,3 +4,8 @@
 *.deps
 /.pos
 /.log
+_autosave-*
+fp-lib-table
+*-cache.lib
+*.bak
+*.kicad_pcb-bak
