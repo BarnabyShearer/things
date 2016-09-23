@@ -1,0 +1,3 @@
+[submodule "scadhelper"]
+	path = scadhelper
+	url = git+ssh://zi.is/c/scadhelper
