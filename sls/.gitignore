@@ -1,0 +1,7 @@
+*.dxf
+/.log
+/.pos
+*.stl
+*.stl.deps
+*.png
+*.webm
